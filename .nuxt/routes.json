@@ -1,0 +1,16 @@
+[
+  {
+    "name": "support",
+    "path": "/support",
+    "component": "/Volumes/Workspace/git/balloon/pages/support/index.vue",
+    "chunkName": "pages/support/index",
+    "_name": "_741d3d79"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Volumes/Workspace/git/balloon/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_1182eeb9"
+  }
+]
