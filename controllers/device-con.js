@@ -10,7 +10,7 @@ const createDevice = async (req, res, next) => {
         name_type
     } = req.body
     console.log(device)
- 
+
     const newDevice = await Device.createDevice(device)
     console.log(newDevice)
     res.send({ "device": newDevice })
@@ -55,4 +55,37 @@ const getDeviceById = async (req, res, next) => {
 module.exports.getDeviceById = getDeviceById;
 
 // --------------------------------------------------------------------------
+
+
+module.exports.getManyDevice = async (req, res, next) => {
+
+    const getDevice = await Device.aggregate([
+        {
+            $match: { code_device: { $in: req.body.data } }
+        },
+        {
+            $lookup:
+            {
+                from: 'types',
+                localField: 'name_type',
+                foreignField: 'name_type',
+                as: 'device_in_type'
+            }
+        },
+        {
+            $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$device_in_type", 0] }, "$$ROOT"] } }
+        },
+        {
+            $project: {
+                device_in_type: 0,
+                date: 0,
+                status_type: 0,
+            }
+        },
+    ])
+
+
+
+    res.send({ "device": getDevice })
+};
 
