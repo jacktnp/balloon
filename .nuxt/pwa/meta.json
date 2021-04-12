@@ -1,5 +1,5 @@
 {
-  "title": "balloon-tw",
+  "title": "balloon",
   "meta": [
     {
       "hid": "charset",
@@ -18,7 +18,7 @@
     {
       "hid": "apple-mobile-web-app-title",
       "name": "apple-mobile-web-app-title",
-      "content": "balloon-tw"
+      "content": "balloon"
     },
     {
       "hid": "description",
@@ -35,13 +35,13 @@
       "hid": "og:title",
       "name": "og:title",
       "property": "og:title",
-      "content": "balloon-tw"
+      "content": "balloon"
     },
     {
       "hid": "og:site_name",
       "name": "og:site_name",
       "property": "og:site_name",
-      "content": "balloon-tw"
+      "content": "balloon"
     },
     {
       "hid": "og:description",
@@ -64,7 +64,7 @@
     },
     {
       "rel": "manifest",
-      "href": "/_nuxt/manifest.baffc37a.json",
+      "href": "/_nuxt/manifest.67a9c15e.json",
       "hid": "manifest"
     }
   ],
