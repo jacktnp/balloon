@@ -16,7 +16,9 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 var mongoose = require('mongoose');
 // var bodyParser = require('body-parser');
+var cors = require('cors')
 
+app.use(cors())
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user');
