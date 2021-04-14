@@ -68,9 +68,14 @@ module.exports.login = async (req, res, next) => {
         process.env.MY_SECRET_KEY,
         { expiresIn: "6h" })
 
-    res.send({
+
+    const date = {
         "token": token,
-        "user":userLogin
+        "user": userLogin
+    }
+
+    res.send({
+        "data": date
     })
 };
 
