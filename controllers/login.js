@@ -61,7 +61,7 @@ module.exports.loginLadp = async (req, res, next) => {
 
 
 module.exports.login = async (req, res, next) => {
-    const userLogin = await User.find({ email: req.body.email })
+    const userLogin = await User.findOne({ email: req.body.email })
 
     const token = jwt.sign(
         { email: req.body.email },
@@ -69,7 +69,8 @@ module.exports.login = async (req, res, next) => {
         { expiresIn: "6h" })
 
     res.send({
-        "token": token
+        "token": token,
+        "user":userLogin
     })
 };
 
