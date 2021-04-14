@@ -46,23 +46,27 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://localhost:8080',
-    credentials: true
+    baseURL: 'http://localhost:8080/',
+    // credentials: true
   },
 
   auth: {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'auth', method: 'post', propertyName: 'data.token' },
-          user: { url: 'me', method: 'get', propertyName: 'data' },
+          login: { url: 'login', method: 'post', propertyName: 'data' },
+          user: { url: 'user', method: 'get', propertyName: 'user' },
           logout: false
         }
       }
     },
     redirect: {
-      login: '/auth'
+      login: '/login'
     }
+  },
+
+  router: {
+    middleware: ['auth']
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -74,5 +78,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  server: {
+    port: 5000 // default: 3000
   }
 }

@@ -103,11 +103,7 @@
                 class="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >History</a
               >
-              <a
-                href="#"
-                class="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >Profile</a
-              >
+              <router-link class="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" :to="{ path: 'profile' }">Profile</router-link>
             </div>
         </div>
       </div>
