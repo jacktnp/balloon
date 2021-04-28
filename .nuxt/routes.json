@@ -3,24 +3,28 @@
     "name": "login",
     "path": "/login",
     "component": "/Volumes/Workspace/git/balloon/pages/login.vue",
-    "chunkName": "pages/login"
+    "chunkName": "pages/login",
+    "_name": "_49aadc60"
   },
   {
     "name": "support",
     "path": "/support",
     "component": "/Volumes/Workspace/git/balloon/pages/support/index.vue",
-    "chunkName": "pages/support/index"
+    "chunkName": "pages/support/index",
+    "_name": "_741d3d79"
   },
   {
     "name": "support-profile",
     "path": "/support/profile",
     "component": "/Volumes/Workspace/git/balloon/pages/support/profile.vue",
-    "chunkName": "pages/support/profile"
+    "chunkName": "pages/support/profile",
+    "_name": "_498859e0"
   },
   {
     "name": "index",
     "path": "/",
     "component": "/Volumes/Workspace/git/balloon/pages/index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_1182eeb9"
   }
 ]

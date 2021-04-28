@@ -5,7 +5,7 @@ import ClientOnly from 'vue-client-only'
 import NoSsr from 'vue-no-ssr'
 import { createRouter } from './router.js'
 import NuxtChild from './components/nuxt-child.js'
-import NuxtError from './components/nuxt-error.vue'
+import NuxtError from '../layouts/error.vue'
 import Nuxt from './components/nuxt.js'
 import App from './App.js'
 import { setContext, getLocation, getRouteData, normalizeError } from './utils'
@@ -18,6 +18,7 @@ import nuxt_plugin_workbox_56f7f1a1 from 'nuxt_plugin_workbox_56f7f1a1' // Sourc
 import nuxt_plugin_metaplugin_464bf098 from 'nuxt_plugin_metaplugin_464bf098' // Source: ./pwa/meta.plugin.js (mode: 'all')
 import nuxt_plugin_iconplugin_3cfca5b0 from 'nuxt_plugin_iconplugin_3cfca5b0' // Source: ./pwa/icon.plugin.js (mode: 'all')
 import nuxt_plugin_axios_51124c76 from 'nuxt_plugin_axios_51124c76' // Source: ./axios.js (mode: 'all')
+import nuxt_plugin_qr_2306cec2 from 'nuxt_plugin_qr_2306cec2' // Source: ../plugins/qr.js (mode: 'client')
 import nuxt_plugin_plugin_feba817e from 'nuxt_plugin_plugin_feba817e' // Source: ./auth/plugin.js (mode: 'all')
 
 // Component: <ClientOnly>
@@ -233,6 +234,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_axios_51124c76 === 'function') {
     await nuxt_plugin_axios_51124c76(app.context, inject)
+  }
+
+  if (process.client && typeof nuxt_plugin_qr_2306cec2 === 'function') {
+    await nuxt_plugin_qr_2306cec2(app.context, inject)
   }
 
   if (typeof nuxt_plugin_plugin_feba817e === 'function') {
