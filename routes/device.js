@@ -11,7 +11,7 @@ const upload = multer({ storage });
 router.route('/')
     .post(deviceController.createDevice)
     .get(catchAsync(deviceController.getAllDevice))
-router.route('id/:id')
+router.route('/id/:id')
     .get(catchAsync(deviceController.getDeviceById))
     .put(catchAsync(deviceController.updateDevice))
     .delete(catchAsync(deviceController.deleteDevice))
