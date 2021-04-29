@@ -2,8 +2,8 @@
   <div>
     <navbar />
     <div class="container">
-      <h4 class="my-4 text-center">Profile</h4>
-      <div class="row justify-content-center">
+      <h4 class="my-4 text-left">Profile</h4>
+      <div class="row justify-content-left p-10">
         <div class="col-4">
           <img src="../../assets/qrcode-demo.png" class="w-100" />
         </div>
