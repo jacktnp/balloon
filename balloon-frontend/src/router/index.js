@@ -6,7 +6,7 @@ import index from '@/pages/index'
 import auth from '@/pages/auth'
 // User
 import qr from '@/pages/user/qr'
-import profile from '@/pages/user/profile'
+import profile from '@/pages/admin/profile'
 // Admin
 
 Vue.use(Router)
@@ -38,7 +38,7 @@ export default new Router({
     },
     // user
     {
-      path: '/user/profile',
+      path: '/admin/profile',
       name: 'profile',
       component: profile
     }
