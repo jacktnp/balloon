@@ -8,6 +8,7 @@ import userindex from '@/pages/user/index'
 import userbrowse from '@/pages/user/browse'
 import supporterActive from '@/pages/user/supporter-active'
 import userprofile from '@/pages/user/profile'
+import profile from '@/pages/admin/profile'
 // Admin
 
 Vue.use(Router)
@@ -46,6 +47,12 @@ export default new Router({
       path: '/user/profile',
       name: 'userprofile',
       component: userprofile
+    },
+    ,
+    {
+      path: '/admin/profile',
+      name: 'profile',
+      component: profile
     },
   ]
 })
