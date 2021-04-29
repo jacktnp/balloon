@@ -2,8 +2,8 @@
   <div>
     <navbar />
     <div class="container">
-      <h4 class="my-4 text-center">Profile</h4>
-      <div class="row justify-content-center">
+      <h4 class="my-4 text-left">Profile</h4>
+      <div class="row justify-content-left p-10">
         <div class="col-4">
           <img src="../../assets/qrcode-demo.png" class="w-100" />
         </div>
@@ -20,12 +20,30 @@
             </div>
           </div>
           <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
+          <p style="margin-top: 0px">Contact :</p>
         </div>
       </div>
-      <div class="d-flex align-items-end" style="height: 65vh">
-        <b-button class="w-100" variant="secondary" v-b-modal.modal-user
-          >Edit</b-button
-        >
+      <div class="position-fixed" style="width: 60%; left: 20%; bottom: 0px">
+        <button type="button" class="btn w-100 btn-secondary">Edit</button>
       </div>
     </div>
   </div>

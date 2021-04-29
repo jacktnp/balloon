@@ -51,22 +51,22 @@
 </template>
 
 <script>
-import navbar from '@/components/navbar';
+import navbar from "@/components/navbar";
 
 export default {
-    components: { navbar },
-    data() {
-        return {
-            editContact : {
-                description: '',
-                image: null
-            }
-        }
+  components: { navbar },
+  data() {
+    return {
+      editContact: {
+        description: "",
+        image: null,
+      },
+    };
+  },
+  methods: {
+    openModal() {
+      this.$bvModal.show("modal-information");
     },
-    methods: {
-        openModal() {
-            this.$bvModal.show('modal-information');
-        }
-    }
-}
+  },
+};
 </script>
