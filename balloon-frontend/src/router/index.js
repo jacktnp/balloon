@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 // Global
 import index from '@/pages/index'
 import auth from '@/pages/auth'
 // User
-import qr from '@/pages/user/qr'
+import userindex from '@/pages/user/index'
+import userbrowse from '@/pages/user/browse'
+import supporterActive from '@/pages/user/supporter-active'
+import userprofile from '@/pages/user/profile'
 // Admin
 
 Vue.use(Router)
@@ -24,16 +26,26 @@ export default new Router({
       name: 'auth',
       component: auth
     },
-    {
-      path: '/auth',
-      name: 'auth',
-      component: auth
-    },
     // user
     {
-      path: '/user/qr',
-      name: 'qr',
-      component: qr
-    }
+      path: '/user',
+      name: 'userindex',
+      component: userindex
+    },
+    {
+      path: '/user/active',
+      name: 'supporterActive',
+      component: supporterActive
+    },
+    {
+      path: '/user/browse',
+      name: 'userbrowse',
+      component: userbrowse
+    },
+    {
+      path: '/user/profile',
+      name: 'userprofile',
+      component: userprofile
+    },
   ]
 })
