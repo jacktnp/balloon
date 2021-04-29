@@ -1,6 +1,6 @@
 <template>
-  <b-container>
-    <b-form @click="authLogin">
+  <b-container class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <b-form class="w-75" @click="authLogin">
       <b-form-group>
         <b-form-input
           v-model="username"
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
       authLogin() {
-          
+
       }
   }
 };
