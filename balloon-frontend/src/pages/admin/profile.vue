@@ -19,27 +19,6 @@
               </b-form-checkbox>
             </div>
           </div>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
-          <p style="margin-top: 0px">Contact :</p>
         </div>
       </div>
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 0px">

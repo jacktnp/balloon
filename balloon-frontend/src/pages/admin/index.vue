@@ -12,6 +12,8 @@
               class="w-100"
               type="text"
               placeholder="ระบุ ทส และกด ENTER หรือแสกน QR Code"
+              v-model="item"
+              v-on:keyup.enter="addItem"
             ></b-form-input>
           </b-form-group>
         </div>
@@ -22,41 +24,23 @@
         </div>
       </div>
 
-      <b-list-group>
+      <b-list-group class="mt-2" style="height: 52vh;overflow-y: auto;">
         <b-list-group-item
           class="d-flex justify-content-between align-items-center border-0"
+          v-for="(item, index) in items" :key="index"
         >
-          serial number...
-          <small>
+          {{ item }}
+          <small @click.prevent="delItem(index)">
               <i class="fas fa-trash-alt"></i>
           </small>
         </b-list-group-item>
       </b-list-group>
 
-      <div class="d-flex align-items-end" style="height: 65vh">
-        <b-button class="w-100" variant="success" v-b-modal.modal-user
-          >Edit</b-button
-        >
+      <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
+        <b-button class="w-100" variant="success">Next</b-button>
       </div>
     </b-container>
 
-    <!-- Modal -->
-    <b-modal id="modal-user" centered hide-footer title="Profile">
-      <b-form-group label="Contact Description">
-        <b-form-textarea
-          id="textarea-formatter"
-          v-model="editContact.description"
-        ></b-form-textarea>
-      </b-form-group>
-      <hr />
-      <b-form-group label="Upload image">
-        <b-form-file></b-form-file>
-      </b-form-group>
-
-      <div class="text-center">
-        <b-button class="w-50 mt-2" variant="success">Save</b-button>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -67,15 +51,25 @@ export default {
   components: { navbar },
   data() {
     return {
-      editContact: {
-        description: "",
-        image: null
-      }
+      item: '',
+      items: []
     };
   },
   methods: {
     openModal() {
       this.$bvModal.show("modal-information");
+    },
+    addItem() {
+        if(this.item.length > 0){
+            this.items.push(this.item);
+            this.item = '';
+        }
+        else {
+            alert("กรุณาระบุข้อมูลให้ครบ")
+        }
+    },
+    delItem(index) {
+        this.items.splice(index);
     }
   }
 };
