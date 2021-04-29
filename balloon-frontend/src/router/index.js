@@ -5,6 +5,7 @@ import HelloWorld from '@/components/HelloWorld'
 import auth from '@/pages/auth'
 // User
 import qr from '@/pages/user/qr'
+import profile from '@/pages/user/profile'
 // Admin
 
 Vue.use(Router)
@@ -22,6 +23,12 @@ export default new Router({
       path: '/user/qr',
       name: 'qr',
       component: qr
+    },
+    // user
+    {
+      path: '/user/profile',
+      name: 'profile',
+      component: profile
     }
   ]
 })
