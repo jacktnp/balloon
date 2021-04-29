@@ -1,45 +1,55 @@
 <template>
-  <div>
-    <navbar />
-    <div class="container">
-      <h4 class="my-4 text-center">Profile</h4>
-      <div class="row justify-content-center">
-        <div class="col-4">
-          <img src="../../assets/qrcode-demo.png" class="w-100" />
-        </div>
-        <div class="col-4">
-          <p style="margin-bottom: 0px">Narongded Pinprechachai</p>
+    <div>
+        <navbar />
+        <b-container class="w-75">
+            <h4 class="my-4 text-center font-weight-light">Browse</h4>
 
-          <div class="row">
-            <div class="col-5">
-              <span class="text-sucess"> Active </span>
+            <div class="row">
+                <div class="col-4 col-md-2">
+                    <img src="../../assets/qrcode-demo.png" class="w-100">
+                </div>
+                <div class="col-8 col-md-10">
+                    <h6 class="mb-0">Thanapon Wongprasert</h6>
+                    <small>Borrow ID : 60070031</small>
+                    <p class="mt-2"><b>Contact :</b></p>
+                </div>
             </div>
-            <div class="col-5">
-              <b-form-checkbox v-model="checked" name="check-button" switch>
-              </b-form-checkbox>
+
+            <div class="d-flex align-items-end" style="height: 65vh">
+                <b-button class="w-100" variant="secondary" v-b-modal.modal-user>Edit</b-button>
             </div>
-          </div>
-          <p style="margin-top: 0px">Contact :</p>
-        </div>
-      </div>
-      <div class="d-flex align-items-end" style="height: 65vh">
-        <b-button class="w-100" variant="secondary" v-b-modal.modal-user
-          >Edit</b-button
-        >
-      </div>
+        </b-container>
+
+        <!-- Modal -->
+        <b-modal id="modal-user" centered hide-footer title="Profile">
+            <b-form-group
+                label="Contact Description"
+            >
+                <b-form-textarea
+                    id="textarea-formatter"
+                    v-model="editContact.description"
+                ></b-form-textarea>
+            </b-modal>
     </div>
-  </div>
 </template>
 
 <script>
-import navbar from "@/components/navbar";
+import navbar from '@/components/navbar';
 
 export default {
-  components: { navbar },
-  data() {
-    return {
-      checked: true,
-    };
-  },
-};
+    components: { navbar },
+    data() {
+        return {
+            editContact : {
+                description: '',
+                image: null
+            }
+        }
+    },
+    methods: {
+        openModal() {
+            this.$bvModal.show('modal-information');
+        }
+    }
+}
 </script>
