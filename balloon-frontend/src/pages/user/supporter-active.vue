@@ -2,7 +2,9 @@
     <div>
         <navbar />
         <b-container class="w-75">
-            <h4 class="my-4 text-center font-weight-light">Supporter Active</h4>
+            <h4 class="mt-4 font-weight-light">Supporter Active</h4>
+            <hr class="mb-4">
+
             <div class="row mt-3">
                 <div class="col-4 col-md-2">
                     <img src="../../assets/qrcode-demo.png" class="w-100">

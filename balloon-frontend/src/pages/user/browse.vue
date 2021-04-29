@@ -2,7 +2,8 @@
     <div>
         <navbar />
         <b-container class="w-75">
-            <h4 class="my-4 text-center font-weight-light">Browse</h4>
+            <h4 class="mt-4 font-weight-light">Browse</h4>
+            <hr class="mb-4">
 
             <div class="row">
                 <div class="col-6 col-md-3">
