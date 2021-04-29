@@ -10,13 +10,14 @@ import supporterActive from '@/pages/user/supporter-active'
 import userprofile from '@/pages/user/profile'
 import profile from '@/pages/admin/profile'
 // Admin
+import adminindex from '@/pages/admin/index'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
-    // 
+    // Global
     {
       path: '/',
       name: 'index',
@@ -48,7 +49,12 @@ export default new Router({
       name: 'userprofile',
       component: userprofile
     },
-    ,
+    // Admin
+    {
+      path: '/admin',
+      name: 'adminindex',
+      component: adminindex
+    },
     {
       path: '/admin/profile',
       name: 'profile',
