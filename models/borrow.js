@@ -7,7 +7,7 @@ var BorrowSchema = mongoose.Schema({
         type: String
     },
     date_return: {
-        type: String
+        type: Date
     },
     device: {
         type: [

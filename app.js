@@ -28,6 +28,11 @@ var deviceRouter = require('./routes/device');
 var loginRouter = require('./routes/login');
 
 
+
+
+
+
+
 // -------------------------------
 // app.use(express.json());
 // app.use(bodyParser.urlencoded({extended:true}));
@@ -71,7 +76,7 @@ const requireJWTAuth = passport.authenticate("jwt", {
 app.use('/', indexRouter);
 app.use('/user',usersRouter);
 app.use('/type',requireJWTAuth, typeRouter);
-app.use('/borrow',requireJWTAuth, borrowRouter);
+app.use('/borrow', borrowRouter);
 app.use('/device',requireJWTAuth, deviceRouter);
 app.use('/login', loginRouter);
 

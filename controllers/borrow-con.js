@@ -5,7 +5,7 @@ const { get } = require("../routes");
 
 const addDays = function (days) {
     var date = new Date();
-    date.setDate(date.getDate() + days);
+    date.setDate(date.getDate() + parseInt(days));
     console.log(date)
     return date;
 }
@@ -20,7 +20,7 @@ const createBorrow = async (req, res, next) => {
     borrow.date_return = addDays(date_return)
     borrow.date = date = new Date().toString()
     const newBorrow = await Borrow.createBorrow(borrow)
-    res.send({ "borrow": newBorrow })
+    res.send({ "borrow": borrow })
 };
 module.exports.createBorrow = createBorrow;
 
@@ -131,5 +131,81 @@ module.exports.updateAllDeviceInBorrow = async (req, res, next) => {
 
 module.exports.supportAppoveReturn = async (req, res, next) => {
     // support ยืนยันการคืน
+}
+// --------------------------------------------------------------------------------------
+
+
+
+function sendmail(username) {
+
+
+    let transporter = nodemailer.createTransport({
+        // host: 'gmail',
+        secure: false,
+        // service: 'Gmail',
+        // auth: {
+        //   user: 'prachyaprapawat@gmail.com',
+        //   pass: 'prachya123',
+        // },
+        tls: {
+            rejectUnauthorized: false
+        },
+        service: 'SendinBlue', // no need to set host or port etc.
+        auth: {
+            user: 'thanaponwps@gmail.com',
+            pass: 'xsmtpsib-b30138123d97b037ccd7ed40b95f942e25253ef25ace0d8f87681dc61f74f822-Wx4BMCyZf9JGgamO'
+        }
+    });
+    transporter.sendMail({
+        from: 'thanaponwps@gmail.com',   // ผู้ส่ง
+        to: "" + username,// ผู้รับ
+        subject: "เลยกำหนดคืนของ Suppport ",                      // หัวข้อ
+        text: 'เลยกำหนดคืนของ Suppport',                         // ข้อความ
+        // html: "<br> Link:<a href= http://localhost:8080/test/validateRegister/" + validateRegisterToken + "> LISS <a>"  // ข้อความ
+        html: `<b> กรุณาคืนของที่ยืม support  </b>`
+    });
+    return 0
+
+}
+
+
+
+
+
+
+const nodemailer = require("nodemailer");
+
+
+
+module.exports.alertReturn = async (req, res, next) => {
+
+    console.log(new Date().toISOString())
+    const getBorrow = await Borrow.find({
+        status: 'borrow',
+        // date_return:
+        // {
+        //     $gte: { $date: new Date(today) }
+        // }
+    })
+    let sendEmail = []
+    getBorrow.map(data => {
+        if (data.date_return.getTime() <= new Date().getTime()) {
+            // sendEmail.email = data.email
+            // sendEmail.date_return = data.date_return
+            const objData = { email: data.email, date_return: data.date_return }
+            sendEmail.push(objData)
+        }
+    })
+    console.log(sendEmail)
+
+
+    const username = ["boss003_@hotmail.com", 'prachyaprapawat@gmail.com']
+    username.map(data => {
+        sendmail(data)
+
+    })
+
+
+    res.send({ getBorrow: getBorrow })
 }
 

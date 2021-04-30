@@ -22,4 +22,21 @@ router.route('/device/return-one-device')
 router.route('/device/return-all-device')
     .post(catchAsync(borrowController.updateAllDeviceInBorrow))
 
+router.route('/device/alert-return')
+    .get(borrowController.alertReturn)
+
+
+var cron = require('node-cron');
+const axios = require('axios');
+cron.schedule(' 0 9 * * *', () => {
+    axios.get('http://localhost:8080/borrow/device/alert-return').then(resp => {
+        console.log("---------user alert------------");
+        console.log(resp.data);
+    });
+});
+
+
+
+
+
 module.exports = router;

@@ -6,7 +6,6 @@ const variable_status = require("../config/variable_status");
 const createDevice = async (req, res, next) => {
     const device = {
         code_device,
-        detail_device,
         name_type
     } = req.body
     console.log(device)
@@ -54,9 +53,16 @@ const getDeviceById = async (req, res, next) => {
 };
 module.exports.getDeviceById = getDeviceById;
 
+
+const getAllDeviceByType = async (req, res, next) => {
+    const getDevice = await Device.find({name_type: req.params.id})
+    res.send({ "device": getDevice })
+};
+module.exports.getAllDeviceByType = getAllDeviceByType;
+
+
+
 // --------------------------------------------------------------------------
-
-
 module.exports.getManyDevice = async (req, res, next) => {
 
     const getDevice = await Device.aggregate([
@@ -88,4 +94,7 @@ module.exports.getManyDevice = async (req, res, next) => {
 
     res.send({ "device": getDevice })
 };
+
+
+
 
