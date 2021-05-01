@@ -2,12 +2,12 @@
   <div>
     <navbar />
     <b-container class="w-75">
-      <h4 class="mt-4 font-weight-light">Profile</h4>
+      <h5 class="mt-4 font-weight-light">Profile</h5>
       <hr class="mb-4" />
 
       <div class="row">
         <div class="col-4 col-md-2">
-          <img :src="checkImage(user.img)" class="w-100" />
+          <img :src="checkImage(user.img)" class="w-100 rounded" />
         </div>
         <div class="col-8 col-md-10">
           <h6 class="mb-0">{{ user.fullname }}</h6>

@@ -15,5 +15,10 @@ export default {
 
 <style>
 #app {
+  
+}
+
+.container {
+  max-width: 480px !important;
 }
 </style>

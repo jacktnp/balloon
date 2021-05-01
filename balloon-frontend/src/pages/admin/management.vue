@@ -2,7 +2,7 @@
   <div>
     <navbar />
     <b-container class="w-75">
-      <h4 class="mt-4 font-weight-light">Management</h4>
+      <h5 class="mt-4 font-weight-light">Management</h5>
       <hr class="mb-4" />
 
       <div class="row">

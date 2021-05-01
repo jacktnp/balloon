@@ -2,7 +2,7 @@
   <div>
     <navbar />
     <b-container class="w-75">
-      <h4 class="mt-4 font-weight-light">Add Device</h4>
+      <h5 class="mt-4 font-weight-light">Add Device</h5>
       <hr class="mb-4" />
 
       <img :src="checkImage(equipment.img)" class="w-100" />
@@ -37,6 +37,14 @@
         >
           {{ item.code_device }}
 
+          <small
+            @click.prevent="
+              downloadItem(item.name_type, item._id, item.code_device)
+            "
+          >
+            <i class="fas fa-download"></i>
+          </small>
+
           <small @click.prevent="delItem(item._id)">
             <i class="fas fa-trash-alt"></i>
           </small>
@@ -44,7 +52,10 @@
       </b-list-group>
 
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
-        <b-button class="w-100" variant="success">SAVE</b-button>
+        <b-button class="w-100" variant="secondary" @click="downloadAll"
+          >Download All</b-button
+        >
+        <!-- <b-button class="w-100" variant="success">SAVE</b-button> -->
       </div>
     </b-container>
   </div>
@@ -53,6 +64,7 @@
 <script>
 import navbar from "@/components/navbar";
 import axios from "@/store/api";
+import { saveAs } from "file-saver";
 
 export default {
   components: { navbar },
@@ -65,6 +77,32 @@ export default {
     };
   },
   methods: {
+    downloadItem(name, id, code) {
+      axios
+        .get(
+          `https://dev.initerapp.com/qrcode.php?id=${id}&name=${code}`,
+          { responseType: "blob" }
+        )
+        .then(response => {
+          const blob = new Blob([response.data], { type: "application/png" });
+          saveAs(blob, name + "_" + code + ".png");
+        })
+        .catch(console.error);
+    },
+    downloadAll() {
+      this.device.map(value => {
+        axios
+          .get(
+            `https://dev.initerapp.com/qrcode.php?id=${value._id}&name=${value.code_device}`,
+            { responseType: "blob" }
+          )
+          .then(response => {
+            const blob = new Blob([response.data], { type: "application/png" });
+            saveAs(blob, value.name_type + "_" + value.code_device + ".png");
+          })
+          .catch(console.error);
+      });
+    },
     getEquipment() {
       axios
         .get("type/id/" + this.$route.params.id, {
@@ -101,10 +139,18 @@ export default {
     addItem() {
       if (this.item != "") {
         axios
-          .post("device", {
-            name_type: this.equipment.name_type,
-            code_device: this.item
-          })
+          .post(
+            "device",
+            {
+              name_type: this.equipment.name_type,
+              code_device: this.item
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + this.$store.getters.info.token
+              }
+            }
+          )
           .then(
             res => {
               this.device = [];

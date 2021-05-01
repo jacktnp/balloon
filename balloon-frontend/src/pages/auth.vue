@@ -1,5 +1,8 @@
 <template>
-  <b-container class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+  <b-container
+    class="d-flex align-items-center justify-content-center"
+    style="height: 100vh;"
+  >
     <b-form class="w-75" @submit.prevent="authLogin">
       <b-form-group>
         <b-form-input
@@ -34,29 +37,40 @@ export default {
     };
   },
   methods: {
-      authLogin() {
-        axios
+    authLogin() {
+      axios
         .post("login", {
-          email: this.username,
+          email: this.username
           // password: this.password
         })
         .then(
           response => {
-              // Store & Redirect
-              this.$store.commit("setUser", response.data);
+            // Store & Redirect
+            this.$store.commit("setUser", response.data);
 
-              if (response.data.data.user.role == 'support') {
-                this.$router.push({ name: "adminindex" });
-              }
-              else {
-                this.$router.push({ name: "userindex" });
-              }
+            if (response.data.data.user.role == "support") {
+              this.$router.push({ name: "adminindex" });
+            } else {
+              this.$router.push({ name: "userindex" });
+            }
           },
           error => {
-            alert("error")
+            alert("error");
           }
         );
+    },
+    checkAuth() {
+      if (localStorage.getItem("balloon") != null) {
+        if (this.$store.getters.info.user.role == "student") {
+          this.$router.push({ name: "userindex" });
+        } else if (this.$store.getters.info.user.role == "support") {
+          this.$router.push({ name: "adminindex" });
+        }
       }
+    }
+  },
+  mounted() {
+    this.checkAuth();
   }
 };
 </script>
@@ -67,6 +81,6 @@ input {
 }
 
 input::placeholder {
-    text-align: center;
+  text-align: center;
 }
 </style>

@@ -15,12 +15,13 @@
           <div class="d-flex flex-row align-items-center">
             <span v-if="checked == true" class="text-success">Active</span>
             <span v-else class="text-danger">Inactive</span>
-            
+
             <b-form-checkbox
               class="ml-3"
               v-model="checked"
               name="check-button"
               switch
+              @change="updateStatus"
             ></b-form-checkbox>
           </div>
           <p class="mt-2 mb-1"><b>Contact :</b></p>
@@ -99,6 +100,9 @@ export default {
         })
         .then(
           res => {
+            if(res.data.user[0].status == 'inactive'){
+              this.checked = false;
+            }
             this.user = res.data.user[0];
           },
           err => {
@@ -112,6 +116,32 @@ export default {
       } else {
         return url[0].url;
       }
+    },
+    updateStatus() {
+      let formData = new FormData();
+
+      if(this.checked == false){
+        formData.append("status", 'inactive');
+      }
+      else if(this.checked == true){
+        formData.append("status", 'active');
+      }
+      axios
+        .put(
+          "user/" + this.$store.getters.info.user._id, formData,
+          {
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.info.token
+            }
+          }
+        )
+        .then(
+          res => {
+            this.user = [];
+            this.getUser();
+          },
+          err => {}
+        );
     }
   },
   mounted() {

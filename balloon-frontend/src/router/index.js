@@ -9,12 +9,15 @@ import userindex from '@/pages/user/index'
 import userbrowse from '@/pages/user/browse'
 import supporterActive from '@/pages/user/supporter-active'
 import userprofile from '@/pages/user/profile'
+import userhistory from '@/pages/user/history'
 // Admin
 import adminindex from '@/pages/admin/index'
 import adminmanagement from '@/pages/admin/management'
 import adminaddequipment from '@/pages/admin/addEquipment'
 import adminadddevice from '@/pages/admin/addDevice'
 import adminprofile from '@/pages/admin/profile'
+import adminstatus from '@/pages/admin/status'
+import adminhistory from '@/pages/admin/history'
 
 Vue.use(Router)
 
@@ -31,6 +34,11 @@ export default new Router({
       path: '/auth',
       name: 'auth',
       component: auth
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: logout
     },
     // user
     {
@@ -52,6 +60,11 @@ export default new Router({
       path: '/user/profile',
       name: 'userprofile',
       component: userprofile
+    },
+    {
+      path: '/user/history',
+      name: 'userhistory',
+      component: userhistory
     },
     // Admin
     {
@@ -80,9 +93,14 @@ export default new Router({
       component: adminprofile
     },
     {
-      path: '/logout',
-      name: 'logout',
-      component: logout
+      path: '/admin/status',
+      name: 'adminstatus',
+      component: adminstatus
     },
+    {
+      path: '/admin/history',
+      name: 'adminhistory',
+      component: adminhistory
+    }
   ]
 })
