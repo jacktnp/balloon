@@ -11,12 +11,14 @@ const upload = multer({ storage });
 
 
 router.route('/')
-    .post(upload.array('image'),userController.createUser)
+    .post(upload.array('image'), userController.createUser)
     .get(catchAsync(userController.getAllUser))
 router.route('/:id')
     .get(catchAsync(userController.getUserById))
-    .put(upload.array('image'),catchAsync(userController.updateUser))
+    .put(upload.array('image'), catchAsync(userController.updateUser))
     .delete(catchAsync(userController.deleteUser))
+router.route('/email/:id')
+    .get(catchAsync(userController.getUserByEmail))
 
 
 module.exports = router;

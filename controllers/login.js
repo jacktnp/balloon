@@ -28,20 +28,21 @@ module.exports.loginLadp = async (req, res, next) => {
         const userLogin = await User.find({ email: email })
 
 
+        const contract = email.slice(2) + '@it.kmitl.ac.th'
+        const fullname = resdata.firstname + " " + resdata.lastname
         const newUser = {
             email: email,
             role: ldaprole,
-            contract: email,
-            date: new Date
+            contract: contract,
+            date: new Date,
+            fullname: fullname
         }
         console.log(!userLogin)
         console.log(newUser)
 
         if (!userLogin[0]) {
-
             const createNewUser = await User.createUser(newUser)
             console.log(createNewUser)
-
         }
 
         return res.status(200).json({

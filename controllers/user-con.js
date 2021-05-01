@@ -64,4 +64,14 @@ const getUserById = async (req, res, next) => {
 };
 module.exports.getUserById = getUserById;
 
+
+const getUserByEmail = async (req, res, next) => {
+    const getUser = await User.find({ email: req.params.id })
+    res.send({ "user": getUser })
+};
+module.exports.getUserByEmail = getUserByEmail;
+
+
+
+
 // --------------------------------------------------------------------------

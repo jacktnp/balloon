@@ -6,4 +6,10 @@ router.route('/')
     .post(login.login)
 
 
+    router.route('/ladp')
+    .post(login.loginLadp)
+
+
+
+
 module.exports = router;

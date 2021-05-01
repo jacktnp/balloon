@@ -1,6 +1,7 @@
 const Borrow = require("../models/borrow");
 const variable_status = require("../config/variable_status");
 const { get } = require("../routes");
+const nodemailer = require("nodemailer");
 
 
 const addDays = function (days) {
@@ -156,6 +157,7 @@ function sendmail(username) {
             pass: 'xsmtpsib-b30138123d97b037ccd7ed40b95f942e25253ef25ace0d8f87681dc61f74f822-Wx4BMCyZf9JGgamO'
         }
     });
+
     transporter.sendMail({
         from: 'thanaponwps@gmail.com',   // ผู้ส่ง
         to: "" + username,// ผู้รับ
@@ -163,7 +165,12 @@ function sendmail(username) {
         text: 'เลยกำหนดคืนของ Suppport',                         // ข้อความ
         // html: "<br> Link:<a href= http://localhost:8080/test/validateRegister/" + validateRegisterToken + "> LISS <a>"  // ข้อความ
         html: `<b> กรุณาคืนของที่ยืม support  </b>`
+    }).catch(e => {
+        console.log('mail :' + username + "  error")
+
     });
+
+
     return 0
 
 }
@@ -173,19 +180,13 @@ function sendmail(username) {
 
 
 
-const nodemailer = require("nodemailer");
 
 
 
 module.exports.alertReturn = async (req, res, next) => {
-
     console.log(new Date().toISOString())
     const getBorrow = await Borrow.find({
         status: 'borrow',
-        // date_return:
-        // {
-        //     $gte: { $date: new Date(today) }
-        // }
     })
     let sendEmail = []
     getBorrow.map(data => {
@@ -197,15 +198,10 @@ module.exports.alertReturn = async (req, res, next) => {
         }
     })
     console.log(sendEmail)
+    sendEmail.map(data => {
 
-
-    const username = ["boss003_@hotmail.com", 'prachyaprapawat@gmail.com']
-    username.map(data => {
-        sendmail(data)
-
+        sendmail(data.email)
     })
-
-
-    res.send({ getBorrow: getBorrow })
+    res.send({ sendEmail: sendEmail })
 }
 
