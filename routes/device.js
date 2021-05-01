@@ -17,8 +17,9 @@ router.route('/id/:id')
     .delete(catchAsync(deviceController.deleteDevice))
 router.route('/type/:id')
     .get(catchAsync(deviceController.getAllDeviceByType))
-
-
+    router.route('/code/:id')
+    .get(catchAsync(deviceController.getDeviceByCode))
+    
 
 router.route('/search')
     .post(deviceController.getManyDevice)

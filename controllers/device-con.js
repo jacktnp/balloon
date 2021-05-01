@@ -54,6 +54,14 @@ const getDeviceById = async (req, res, next) => {
 module.exports.getDeviceById = getDeviceById;
 
 
+const getDeviceByCode = async (req, res, next) => {
+    const getDevice = await Device.find({ code_device: req.params.id })
+    res.send({ "device": getDevice })
+};
+module.exports.getDeviceByCode = getDeviceByCode;
+
+
+
 const getAllDeviceByType = async (req, res, next) => {
     const getDevice = await Device.find({name_type: req.params.id})
     res.send({ "device": getDevice })
