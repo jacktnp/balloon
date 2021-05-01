@@ -71,6 +71,11 @@ const getUserByEmail = async (req, res, next) => {
 };
 module.exports.getUserByEmail = getUserByEmail;
 
+const getRoleSupport = async (req, res, next) => {
+    const getUser = await User.find({ role: 'support' })
+    res.send({ "user": getUser })
+};
+module.exports.getRoleSupport = getRoleSupport;
 
 
 

@@ -133,6 +133,30 @@ module.exports.updateAllDeviceInBorrow = async (req, res, next) => {
 module.exports.supportAppoveReturn = async (req, res, next) => {
     // support ยืนยันการคืน
 }
+
+
+
+module.exports.historyUserBorrow = async (req, res, next) => {
+    const getBorrow = await Borrow.find({
+        email: req.params.id, status: 'return'
+    })
+    res.send({ "borrow": getBorrow })
+};
+
+
+
+module.exports.historyAllBorrow = async (req, res, next) => {
+    const getBorrow = await Borrow.find({
+        status: 'return'
+    })
+    res.send({ "borrow": getBorrow })
+};
+
+
+
+
+
+
 // --------------------------------------------------------------------------------------
 
 

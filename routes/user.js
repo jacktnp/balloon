@@ -19,6 +19,7 @@ router.route('/:id')
     .delete(catchAsync(userController.deleteUser))
 router.route('/email/:id')
     .get(catchAsync(userController.getUserByEmail))
-
+    router.route('/support/check')
+    .get(catchAsync(userController.getRoleSupport))
 
 module.exports = router;

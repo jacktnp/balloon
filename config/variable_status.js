@@ -6,7 +6,9 @@ module.exports.user = {
 
 module.exports.user_status = {
   'active': 'active',
-  'ban': 'ban'
+  'ban': 'ban',
+  'inactive': 'inactive',
+
 };
 
 

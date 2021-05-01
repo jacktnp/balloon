@@ -74,6 +74,3 @@ const deleteBorrow = async (id) => {
 module.exports.deleteBorrow = deleteBorrow;
 
 //   ------------------------------------------------------------
-
-
-
