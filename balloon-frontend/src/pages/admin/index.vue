@@ -18,7 +18,11 @@
           </b-form-group>
         </div>
         <div class="col-2 col-md-1 p-1">
-          <b-button class="w-100" variant="danger" @click.prevent="openQRModal()">
+          <b-button
+            class="w-100"
+            variant="danger"
+            @click.prevent="openQRModal()"
+          >
             <i class="fas fa-qrcode"></i>
           </b-button>
         </div>
@@ -67,7 +71,12 @@
           </b-form-group>
         </div>
         <div class="col-2 col-md-1 p-1">
-          <b-button class="w-100" variant="danger" :disabled="userShow" @click.prevent="openQRModal()">
+          <b-button
+            class="w-100"
+            variant="danger"
+            :disabled="userShow"
+            @click.prevent="openQRModal()"
+          >
             <i class="fas fa-qrcode"></i>
           </b-button>
         </div>
@@ -125,13 +134,17 @@
       ></b-form-datepicker>
 
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
-        <b-button class="w-100" variant="success">Confirm</b-button>
+        <b-button class="w-100" variant="success" @click="borrow">Confirm</b-button>
       </div>
     </b-container>
 
     <!-- Modal -->
     <b-modal id="modal-qrcode" centered hide-footer title="QR SCANNER">
-      ...
+      <qrcode-stream @decode="addItembyQR" v-if="step == 1"></qrcode-stream>
+      <qrcode-stream
+        @decode="addUserbyQR"
+        v-else-if="step == 2"
+      ></qrcode-stream>
     </b-modal>
   </div>
 </template>
@@ -153,18 +166,22 @@ export default {
         email: ""
       },
       userShow: false,
-      deadline: null
+      deadline: null,
+      deadline_day: 0
     };
   },
   methods: {
     openQRModal() {
       this.$bvModal.show("modal-qrcode");
     },
+    closeQRModal() {
+      this.$bvModal.hide("modal-qrcode");
+    },
     async addItem() {
       if (this.item.length > 0) {
         // get Item detail
         await axios
-          .get("device/id/" + this.item, {
+          .get("device/code/" + this.item, {
             headers: {
               Authorization: "Bearer " + this.$store.getters.info.token
             }
@@ -185,6 +202,28 @@ export default {
       } else {
         alert("กรุณาระบุข้อมูลให้ครบ");
       }
+    },
+    async addItembyQR(decode) {
+      await axios
+        .get("device/id/" + decode, {
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
+        })
+        .then(
+          res => {
+            var arr = {};
+            arr["_id"] = res.data.device[0]._id;
+            arr["code_device"] = res.data.device[0].code_device;
+            arr["name_type"] = res.data.device[0].name_type;
+            this.items.push(arr);
+          },
+          err => {
+            alert("ไม่มีของชิ้นนี้ในระบบ โปรดตรวจสอบอีกครั้ง");
+          }
+        );
+      this.item = "";
+      this.closeQRModal();
     },
     delItem(index) {
       this.items.splice(index);
@@ -211,6 +250,26 @@ export default {
         alert("กรุณาระบุรหัสนักศึกษาให้ถูกต้อง");
       }
     },
+    async addUserbyQR(decode) {
+      this.userid = decode;
+      await axios
+        .get("user/email/" + decode, {
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
+        })
+        .then(
+          res => {
+            this.userinfo = res.data.user[0];
+          },
+          err => {
+            this.delUser();
+            alert("ชื่อผู้ใช้ไม่ถูกต้อง");
+          }
+        );
+      this.userShow = true;
+      this.closeQRModal();
+    },
     delUser() {
       this.userid = "";
       this.userShow = false;
@@ -218,17 +277,29 @@ export default {
     nextStep(step) {
       this.step = step + 1;
     },
-    borrow() {
-      axios
+    calDeadlineday() {
+      var oneDay = 24 * 60 * 60 * 1000;
+      var today = new Date();
+      var deadline = new Date(this.deadline);
+
+      console.log('today : ', today)
+      console.log('dl : ', deadline)
+
+      this.deadline_day = Math.round(Math.abs((deadline - today) / oneDay));
+      console.log('between: ',this.deadline_day)
+    },
+    async borrow() {
+      await this.calDeadlineday();
+      await axios
         .post("borrow", {
           email: this.userid,
-          date_return: 5,
+          date_return: this.deadline_day,
           device: this.items
         })
         .then(
           res => {
             alert("ยืมสำเร็จ");
-            this.$router.push({ name: "adminindex" })
+            this.$router.push({ name: "adminindex" });
           },
           err => {
             console.log(err);

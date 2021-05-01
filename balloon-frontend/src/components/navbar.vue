@@ -14,19 +14,21 @@
         >
           <b-nav-item :to="{ name: 'userindex' }">Home</b-nav-item>
           <b-nav-item :to="{ name: 'userbrowse' }">Browse</b-nav-item>
-          <!-- <b-nav-item :to="{ name : 'userhistory' }">History</b-nav-item> -->
+          <b-nav-item>History</b-nav-item>
           <b-nav-item :to="{ name: 'userprofile' }">Profile</b-nav-item>
           <b-button class="btn-sm" variant="primary" :to="{ name: 'logout' }"
             >{{ username }} ({{ role }})</b-button
           >
         </b-navbar-nav>
-        
+
         <b-navbar-nav
           class="ml-auto"
           v-else-if="$store.getters.info.user.role == 'support'"
         >
           <b-nav-item :to="{ name: 'adminindex' }">Home</b-nav-item>
           <b-nav-item :to="{ name: 'adminmanagement' }">Management</b-nav-item>
+          <b-nav-item>Status</b-nav-item>
+          <b-nav-item>History</b-nav-item>
           <b-nav-item :to="{ name: 'adminprofile' }">Profile</b-nav-item>
 
           <b-button class="btn-sm" variant="primary" :to="{ name: 'logout' }"
