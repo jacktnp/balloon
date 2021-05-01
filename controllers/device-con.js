@@ -1,4 +1,6 @@
 const Device = require("../models/device");
+const Tyep = require("../models/type");
+
 const variable_status = require("../config/variable_status");
 
 
@@ -9,10 +11,13 @@ const createDevice = async (req, res, next) => {
         name_type
     } = req.body
     console.log(device)
+    const getType = await Tyep.findOne({ name_type: name_type })
+    console.log(getType)
+    device.img = getType.img
 
     const newDevice = await Device.createDevice(device)
     console.log(newDevice)
-    res.send({ "device": newDevice })
+    res.send({ "device": newDevice})
 };
 module.exports.createDevice = createDevice;
 
@@ -63,7 +68,7 @@ module.exports.getDeviceByCode = getDeviceByCode;
 
 
 const getAllDeviceByType = async (req, res, next) => {
-    const getDevice = await Device.find({name_type: req.params.id})
+    const getDevice = await Device.find({ name_type: req.params.id })
     res.send({ "device": getDevice })
 };
 module.exports.getAllDeviceByType = getAllDeviceByType;

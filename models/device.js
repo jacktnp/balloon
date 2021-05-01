@@ -13,6 +13,9 @@ var DeviceSchema = mongoose.Schema({
     name_type: {
         type: String
     },
+    img:{
+        type:[]
+    },
     date: {
         type: String,
         default: new Date()
