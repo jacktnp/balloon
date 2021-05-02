@@ -17,11 +17,19 @@ const createBorrow = async (req, res, next) => {
         date_return,
         device,
     } = req.body
-    console.log(borrow)
-    borrow.date_return = addDays(date_return)
-    borrow.date = date = new Date().toString()
-    const newBorrow = await Borrow.createBorrow(borrow)
-    res.send({ "borrow": borrow })
+    const getBorrow = await Borrow.find({ status: "borrow", email: email })
+    console.log(getBorrow.length)
+    if (getBorrow.length > 0) {
+        res.status(403).send({ "borrow": "cant borrow please return" })
+
+    } else {
+        console.log(borrow)
+        borrow.date_return = addDays(date_return)
+        borrow.date = date = new Date().toString()
+        const newBorrow = await Borrow.createBorrow(borrow)
+        res.send({ "borrow": borrow })
+    }
+
 };
 module.exports.createBorrow = createBorrow;
 
