@@ -2,7 +2,7 @@
   <div>
     <navbar />
     <b-container class="w-75">
-      <h4 class="mt-4 font-weight-light">Profile</h4>
+      <h5 class="mt-4 font-weight-light">Profile</h5>
       <hr class="mb-4" />
 
       <div class="row">
@@ -41,14 +41,14 @@
     </b-container>
 
     <b-modal id="edit-modal" title="Edit Profile" centered hide-footer>
-      <form>
-        <b-form-group label="Full name:">
+      <form @submit.prevent="updateUser()">
+        <!-- <b-form-group label="Full name:">
           <b-form-input
             v-model="editContact.fullname"
             placeholder="Enter Fullname"
             required
           ></b-form-input>
-        </b-form-group>
+        </b-form-group> -->
 
         <b-form-group label="Contact Description">
           <b-form-textarea
@@ -59,11 +59,11 @@
 
         <hr />
         <b-form-group label="Upload image">
-          <b-form-file></b-form-file>
+          <b-form-file @change="selectImages"></b-form-file>
         </b-form-group>
 
         <div class="text-center">
-          <b-button class="w-50 mt-2" variant="success">Save</b-button>
+          <b-button type="submit" class="w-50 mt-2" variant="success">Save</b-button>
         </div>
       </form>
     </b-modal>
@@ -88,6 +88,9 @@ export default {
     };
   },
   methods: {
+    selectImages(event) {
+      this.editContact.image = event.target.files;
+    },
     editModal() {
       this.$bvModal.show("edit-modal");
     },
@@ -142,7 +145,35 @@ export default {
           },
           err => {}
         );
-    }
+    },
+    updateUser() {
+      this.$isLoading(true);
+
+      let formData = new FormData();
+      if (this.editContact.description != "") {
+        formData.append("contract", this.editContact.description);
+      }
+      
+      if (this.editContact.image != null) {
+        formData.append("image", this.editContact.image[0]);
+      }
+
+      axios
+        .put("user/" + this.$store.getters.info.user._id, formData, {
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
+        })
+        .then(
+          res => {
+            this.$isLoading(false);
+            location.reload();
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    },
   },
   mounted() {
     this.getUser();

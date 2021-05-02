@@ -8,7 +8,7 @@
             <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=500x5000&data='+$store.getters.info.user.email" class="w-100">
             <br>
             <br>
-            <h6 class="text-center">User ID : {{ $store.getters.info.user.email }}</h6>
+            <h5 class="mt-3 text-center"><b>USER ID :</b> {{ $store.getters.info.user.email }}</h5>
         </b-container>
     </div>
 </template>

@@ -5,14 +5,24 @@
       <h5 class="mt-4 font-weight-light">Browse</h5>
       <hr class="mb-4" />
 
+      <b-form-group
+      >
+        <b-form-input
+          v-model="search"
+          placeholder="ค้นหาคำที่ต้องการ..."
+        ></b-form-input>
+      </b-form-group>
+
       <div class="row">
-        <div class="col-6 col-md-3 px-1" v-for="(item, index) in equipments" :key="index">
-          <div class="card my-3" @click="openModal(index)">
-            <img :src="checkImage(item.img)" height="120px"/>
+        <div class="col-6 col-md-4 px-1" v-for="(item, index) in filteredList" :key="index">
+          <div class="card my-3" @click="openModal(item._id)">
+            <img :src="checkImage(item.img)" height="150px"/>
           </div>
           <h6 class="text-center">{{ item.name_type }}</h6>
         </div>
       </div>
+      <br>
+      <br>
     </b-container>
 
     <!-- Modal -->
@@ -51,13 +61,18 @@ export default {
   data() {
     return {
       equipments: [],
-      index: 0
+      index: 0,
+      search: ''
     };
   },
   methods: {
-    openModal(index) {
+    openModal(id) {
+      this.equipments.map((value, index) => {
+        if(id == value._id){
+          this.index = index;
+        }
+      })
       this.$bvModal.show("modal-information");
-      this.index = index;
     },
     getEquipment() {
       axios
@@ -85,6 +100,13 @@ export default {
   },
   mounted() {
     this.getEquipment();
+  },
+  computed: {
+    filteredList() {
+      return this.equipments.filter(equipment => {
+        return equipment.name_type.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
   }
 };
 </script>

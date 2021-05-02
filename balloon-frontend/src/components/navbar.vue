@@ -64,4 +64,8 @@ export default {
 .navbar-light .navbar-toggler {
   border: 0px !important;
 }
+
+.bg-light {
+  background: #fff !important;
+}
 </style>

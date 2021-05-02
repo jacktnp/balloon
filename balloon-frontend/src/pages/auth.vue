@@ -4,6 +4,9 @@
     style="height: 100vh;"
   >
     <b-form class="w-75" @submit.prevent="authLogin">
+      <p class="text-center">
+        <img src="../assets/logo2.png" class="w-75 mb-3" />
+      </p>
       <b-form-group>
         <b-form-input
           v-model="username"

@@ -11,7 +11,7 @@
             <b-form-input
               class="w-100"
               type="text"
-              placeholder="ระบุ ทส และกด ENTER หรือแสกน QR Code"
+              placeholder="ENTER DEVICE CODE OR SCAN"
               v-model="item"
               v-on:keyup.enter="addItem"
             ></b-form-input>
@@ -63,7 +63,7 @@
             <b-form-input
               class="w-100"
               type="text"
-              placeholder="ระบุรหัสนักศึกษาและกด ENTER"
+              placeholder="ENTER USER ID with itxxxxxxxx"
               v-model="userid"
               v-on:keyup.enter="addUser"
               :disabled="userShow"
@@ -128,8 +128,8 @@
       </p>
       <label for="datepicker-sm">ระบุวันคืน:</label>
       <b-form-datepicker
+        :min="new Date()"
         size="sm"
-        locale="th"
         v-model="deadline"
       ></b-form-datepicker>
 
@@ -152,6 +152,7 @@
 <script>
 import navbar from "@/components/navbar";
 import axios from "@/store/api";
+
 
 export default {
   components: { navbar },
@@ -188,14 +189,20 @@ export default {
           })
           .then(
             res => {
-              var arr = {};
-              arr["_id"] = res.data.device[0]._id;
-              arr["code_device"] = res.data.device[0].code_device;
-              arr["name_type"] = res.data.device[0].name_type;
-              this.items.push(arr);
+              if(res.data.device.length == 0){
+                alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง")
+              }
+              else{
+                var arr = {};
+                arr["_id"] = res.data.device[0]._id;
+                arr["code_device"] = res.data.device[0].code_device;
+                arr["name_type"] = res.data.device[0].name_type;
+                this.items.push(arr);
+              }
             },
             err => {
               console.log(err);
+              alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง")
             }
           );
         this.item = "";
@@ -238,7 +245,13 @@ export default {
           })
           .then(
             res => {
-              this.userinfo = res.data.user[0];
+              if(res.data.user.length == 0){
+                this.delUser();
+                alert("ชื่อผู้ใช้ไม่ถูกต้อง");
+              }
+              else{
+                this.userinfo = res.data.user[0];
+              }
             },
             err => {
               this.delUser();
@@ -298,8 +311,8 @@ export default {
         })
         .then(
           res => {
-            alert("ยืมสำเร็จ");
-            this.$router.push({ name: "adminindex" });
+            alert("ทำรายการสำเร็จ");
+            this.$router.push({ name: "index" });
           },
           err => {
             console.log(err);

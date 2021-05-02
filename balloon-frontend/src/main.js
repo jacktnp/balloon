@@ -24,6 +24,16 @@ Vue.use(VueAxios, axios)
 import VueQrcodeReader from "vue-qrcode-reader";
 Vue.use(VueQrcodeReader);
 
+// VueLoading
+import loading from 'vuejs-loading-screen'
+
+Vue.use(loading, {
+  bg: '#000000e0',
+  icon: 'far fa-life-ring',
+  size: 3,
+  icon_color: 'white',
+})
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

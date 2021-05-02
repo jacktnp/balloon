@@ -10,7 +10,7 @@
           <img src="../../assets/qrcode-demo.png" class="w-100" />
         </div>
         <div class="col-8 col-md-10">
-          <h6 class="mt-2 mb-0">{{ support.fullname || support.email}}</h6>
+          <h6 class="mt-2 mb-0">{{ support.fullname || support.email }}</h6>
           <small class="text-danger" v-if="support.status == 'inactive'">Offline</small>
           <small class="text-success" v-if="support.status == 'active'">Online</small>
         </div>

@@ -2,7 +2,12 @@
   <div>
     <navbar />
     <b-container class="w-75">
-      <h5 class="mt-4 font-weight-light">Add Device</h5>
+      <h5 class="mt-4 font-weight-light">
+        <router-link :to="{ name: 'adminmanagement' }"
+          ><i class="fal fa-chevron-left mr-3"></i
+        ></router-link>
+        Add Device
+      </h5>
       <hr class="mb-4" />
 
       <img :src="checkImage(equipment.img)" class="w-100" />
@@ -11,7 +16,7 @@
       <!-- <p><b>Category : </b> {{ equipment.category }}</p> -->
 
       <div class="row mt-4">
-        <div class="col-9 col-md-11 p-1">
+        <div class="col-9 col-md-10 p-1">
           <b-form-group>
             <b-form-input
               class="w-100"
@@ -22,14 +27,14 @@
             ></b-form-input>
           </b-form-group>
         </div>
-        <div class="col-3 col-md-1 p-1">
+        <div class="col-3 col-md-2 p-1">
           <b-button class="w-100" variant="primary" @click="addItem">
             Add
           </b-button>
         </div>
       </div>
 
-      <b-list-group class="mt-2" style="height: 18vh;overflow-y: auto;">
+      <b-list-group class="mt-2 mb-5" style="height: 18vh;overflow-y: auto;">
         <b-list-group-item
           class="d-flex justify-content-between align-items-center border-0"
           v-for="(item, index) in device"
@@ -50,6 +55,8 @@
           </small>
         </b-list-group-item>
       </b-list-group>
+      <br />
+      <br /><br />
 
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
         <b-button class="w-100" variant="secondary" @click="downloadAll"
@@ -79,10 +86,9 @@ export default {
   methods: {
     downloadItem(name, id, code) {
       axios
-        .get(
-          `https://dev.initerapp.com/qrcode.php?id=${id}&name=${code}`,
-          { responseType: "blob" }
-        )
+        .get(`https://dev.initerapp.com/qrcode.php?id=${id}&name=${code}`, {
+          responseType: "blob"
+        })
         .then(response => {
           const blob = new Blob([response.data], { type: "application/png" });
           saveAs(blob, name + "_" + code + ".png");
@@ -165,18 +171,23 @@ export default {
         alert("กรุณากรอกข้อมูล");
       }
     },
-    delItem(index) {
-      // this.items.splice(index);
-      axios.delete("device/id/" + index).then(
-        res => {
-          this.equipment = {};
-          this.device = [];
-          this.getEquipment();
-        },
-        err => {
-          console.log(err);
-        }
-      );
+    delItem(id) {
+      axios
+        .delete("device/id/" + id, {
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
+        })
+        .then(
+          res => {
+            this.equipment = {};
+            this.device = [];
+            this.getEquipment();
+          },
+          err => {
+            console.log(err);
+          }
+        );
     },
     checkImage(url) {
       if (url.length <= 0) {

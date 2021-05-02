@@ -38,13 +38,16 @@
       </b-form-group>
       <hr />
       <b-form-group label="Upload image">
-        <b-form-file></b-form-file>
+        <b-form-file @change="selectImages"></b-form-file>
       </b-form-group>
 
       <div class="text-center">
-        <b-button class="w-50 mt-2" variant="success">Save</b-button>
+        <b-button class="w-50 mt-2" variant="success" @click="updateUser"
+          >Save</b-button
+        >
       </div>
     </b-modal>
+
   </div>
 </template>
 
@@ -53,7 +56,7 @@ import navbar from "@/components/navbar";
 import axios from "@/store/api";
 
 export default {
-  components: { navbar },
+  components: { navbar, },
   data() {
     return {
       editContact: {
@@ -69,6 +72,9 @@ export default {
     };
   },
   methods: {
+    selectImages(event) {
+      this.editContact.image = event.target.files;
+    },
     openModal() {
       this.$bvModal.show("modal-user");
     },
@@ -82,6 +88,34 @@ export default {
         .then(
           res => {
             this.user = res.data.user[0];
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    },
+    updateUser() {
+      this.$isLoading(true);
+
+      let formData = new FormData();
+      if (this.editContact.description != "") {
+        formData.append("contract", this.editContact.description);
+      }
+      
+      if (this.editContact.image != null) {
+        formData.append("image", this.editContact.image[0]);
+      }
+
+      axios
+        .put("user/" + this.$store.getters.info.user._id, formData, {
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
+        })
+        .then(
+          res => {
+            this.$isLoading(false);
+            location.reload();
           },
           err => {
             console.log(err);
