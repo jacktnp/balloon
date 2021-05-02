@@ -7,6 +7,10 @@ var TypeSchema = mongoose.Schema({
         type: String,
         default: 'active'
     },
+    category : {
+        type: String,
+    },
+
     detail_type: {
         type: String
     },

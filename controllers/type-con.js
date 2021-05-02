@@ -7,6 +7,7 @@ const createType = async (req, res, next) => {
     const type = {
         detail_type,
         name_type,
+        category
     } = req.body
     console.log(type)
     if (req.files) {
@@ -25,6 +26,7 @@ const updateType = async (req, res, next) => {
         status_type,
         detail_type,
         name_type,
+        category
     } = req.body
     if (req.files) {
         var paths = req.files.map(file => ({ url: file.path, filename: file.filename }))

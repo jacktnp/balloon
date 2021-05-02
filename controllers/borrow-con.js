@@ -138,7 +138,7 @@ module.exports.supportAppoveReturn = async (req, res, next) => {
 
 module.exports.historyUserBorrow = async (req, res, next) => {
     const getBorrow = await Borrow.find({
-        email: req.params.id, status: 'return'
+        email: req.params.id
     })
     res.send({ "borrow": getBorrow })
 };
