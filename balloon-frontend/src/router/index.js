@@ -15,7 +15,7 @@ import adminmanagement from '@/pages/admin/management'
 import adminaddequipment from '@/pages/admin/addEquipment'
 import adminadddevice from '@/pages/admin/addDevice'
 import adminprofile from '@/pages/admin/profile'
-
+import test from '@/pages/admin/test'
 Vue.use(Router)
 
 export default new Router({
@@ -68,6 +68,11 @@ export default new Router({
       path: '/admin/management/add',
       name: 'adminaddequipment',
       component: adminaddequipment
+    },
+    {
+      path: '/admin/test',
+      name: 'test',
+      component: test
     },
     {
       path: '/admin/management/:id',

@@ -23,7 +23,8 @@ Vue.use(VueAxios, axios)
 // QR Code Reader
 import VueQrcodeReader from "vue-qrcode-reader";
 Vue.use(VueQrcodeReader);
-
+import VueQrcode from '@chenfengyuan/vue-qrcode';
+Vue.use(VueQrcode);
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
