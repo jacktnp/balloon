@@ -80,61 +80,71 @@ export default {
       equipment: {},
       device: [],
       item: "",
-      items: [],
+      items: []
     };
   },
   methods: {
     downloadItem(name, id, code) {
       axios
         .get(`https://dev.initerapp.com/qrcode.php?id=${id}&name=${code}`, {
-          responseType: "blob",
+          responseType: "blob"
         })
-        .then((response) => {
+        .then(response => {
           const blob = new Blob([response.data], { type: "application/png" });
           saveAs(blob, name + "_" + code + ".png");
         })
         .catch(console.error);
     },
-    downloadAll() {
+    async downloadAll() {
       let zip = new JSZip();
-      this.device.map((value) => {
-        fetch(
-          `https://dev.initerapp.com/qrcode.php?id=${value._id}&name=${value.code_device}`
-        )
-          .then((res) => res.blob())
-          .then((blob) => {
-            const file = new File([blob], "File name", { type: "image/png" });
-            zip.file(value.name_type + "_" + value.code_device + ".png", file);
-          });
-        // axios
-        //   .get(
-        //     `https://dev.initerapp.com/qrcode.php?id=${value._id}&name=${value.code_device}`,
-        //     { responseType: "blob" }
-        //   )
-        //   .then((response) => {
-        //     const file = new File([blob], "File name", { type: "image/png" });
-        //     const blob = new Blob([response.data], { type: "application/png" });
-        //     saveAs(blob, value.name_type + "_" + value.code_device + ".png");
-        //   })
-        //   .catch(console.error);
-      });
-      zip.generateAsync({ type: "blob" }).then((content) => {
-        saveAs(content,"แก้ชื่อไฟล์ตรงนี้"+ "zip");
+      await new Promise((resolve, reject) =>
+        this.device.map((value,index) => {
+          fetch(
+            `https://dev.initerapp.com/qrcode.php?id=${value._id}&name=${value.code_device}`
+          )
+            .then(res => res.blob())
+            .then(blob => {
+              const file = new File([blob], "File name", { type: "image/png" });
+              zip.file(
+                value.name_type + "_" + value.code_device + ".png",
+                file
+              )
+              if (this.device.length === index+1)   {
+                console.log(index +' ' + this.device.map.length)
+                resolve('succes')
+              }
+           
+            });
+          // axios
+          //   .get(
+          //     `https://dev.initerapp.com/qrcode.php?id=${value._id}&name=${value.code_device}`,
+          //     { responseType: "blob" }
+          //   )
+          //   .then((response) => {
+          //     const file = new File([blob], "File name", { type: "image/png" });
+          //     const blob = new Blob([response.data], { type: "application/png" });
+          //     saveAs(blob, value.name_type + "_" + value.code_device + ".png");
+          //   })
+          //   .catch(console.error);
+        })
+      );
+      zip.generateAsync({ type: "blob" }).then(content => {
+        saveAs(content, "แก้ชื่อไฟล์ตรงนี้" + "zip");
       });
     },
     getEquipment() {
       axios
         .get("type/id/" + this.$route.params.id, {
           headers: {
-            Authorization: "Bearer " + this.$store.getters.info.token,
-          },
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
         })
         .then(
-          (res) => {
+          res => {
             this.equipment = res.data.type[0];
             this.getDevice(res.data.type[0].name_type);
           },
-          (err) => {
+          err => {
             console.log(err);
           }
         );
@@ -143,14 +153,14 @@ export default {
       await axios
         .get("device/type/" + name_type, {
           headers: {
-            Authorization: "Bearer " + this.$store.getters.info.token,
-          },
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
         })
         .then(
-          (res) => {
+          res => {
             this.device = res.data.device;
           },
-          (err) => {
+          err => {
             console.log(err);
           }
         );
@@ -162,20 +172,20 @@ export default {
             "device",
             {
               name_type: this.equipment.name_type,
-              code_device: this.item,
+              code_device: this.item
             },
             {
               headers: {
-                Authorization: "Bearer " + this.$store.getters.info.token,
-              },
+                Authorization: "Bearer " + this.$store.getters.info.token
+              }
             }
           )
           .then(
-            (res) => {
+            res => {
               this.device = [];
               this.getDevice(this.equipment.name_type);
             },
-            (err) => {
+            err => {
               console.log(err);
             }
           );
@@ -188,16 +198,16 @@ export default {
       axios
         .delete("device/id/" + id, {
           headers: {
-            Authorization: "Bearer " + this.$store.getters.info.token,
-          },
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
         })
         .then(
-          (res) => {
+          res => {
             this.equipment = {};
             this.device = [];
             this.getEquipment();
           },
-          (err) => {
+          err => {
             console.log(err);
           }
         );
@@ -208,10 +218,10 @@ export default {
       } else {
         return url[0].url;
       }
-    },
+    }
   },
   mounted() {
     this.getEquipment();
-  },
+  }
 };
 </script>
