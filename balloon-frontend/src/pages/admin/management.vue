@@ -2,24 +2,33 @@
   <div>
     <navbar />
     <b-container class="w-75">
-      <h4 class="mt-4 font-weight-light">Management</h4>
+      <h5 class="mt-4 font-weight-light">Management</h5>
       <hr class="mb-4" />
+
+      <b-form-group
+      >
+        <b-form-input
+          v-model="search"
+          placeholder="ค้นหาคำที่ต้องการ..."
+        ></b-form-input>
+      </b-form-group>
 
       <div class="row">
         <div
-          class="col-6 col-md-3 px-1"
-          v-for="(equipment, index) in equipments"
+          class="col-6 col-md-4 px-1"
+          v-for="(equipment, index) in filteredList"
           :key="index"
         >
           <router-link :to="{ name : 'adminadddevice', params: { id: equipment._id }}">
             <div class="card my-3">
-                <img :src="checkImage(equipment.img)" height="120px"
+                <img :src="checkImage(equipment.img)" height="150px"
                 />
             </div>
             <h6 class="text-center">{{ equipment.name_type }}</h6>
           </router-link>
         </div>
       </div>
+      <br><br><br>
     </b-container>
 
     <div class="position-fixed" style="bottom: 2em;right: 2em;">
@@ -42,7 +51,8 @@ export default {
   components: { navbar },
   data() {
     return {
-      equipments: []
+      equipments: [],
+      search: ''
     };
   },
   methods: {
@@ -73,6 +83,12 @@ export default {
   mounted() {
     this.getEquipment();
   },
-  computed: {}
+  computed: {
+    filteredList() {
+      return this.equipments.filter(equipment => {
+        return equipment.name_type.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
+  }
 };
 </script>

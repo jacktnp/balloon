@@ -2,7 +2,7 @@
   <div>
     <navbar />
     <b-container class="w-75">
-      <h4 class="mt-4 font-weight-light">Profile</h4>
+      <h5 class="mt-4 font-weight-light">Profile</h5>
       <hr class="mb-4" />
 
       <div class="row">
@@ -15,12 +15,13 @@
           <div class="d-flex flex-row align-items-center">
             <span v-if="checked == true" class="text-success">Active</span>
             <span v-else class="text-danger">Inactive</span>
-            
+
             <b-form-checkbox
               class="ml-3"
               v-model="checked"
               name="check-button"
               switch
+              @change="updateStatus"
             ></b-form-checkbox>
           </div>
           <p class="mt-2 mb-1"><b>Contact :</b></p>
@@ -40,14 +41,14 @@
     </b-container>
 
     <b-modal id="edit-modal" title="Edit Profile" centered hide-footer>
-      <form>
-        <b-form-group label="Full name:">
+      <form @submit.prevent="updateUser()">
+        <!-- <b-form-group label="Full name:">
           <b-form-input
             v-model="editContact.fullname"
             placeholder="Enter Fullname"
             required
           ></b-form-input>
-        </b-form-group>
+        </b-form-group> -->
 
         <b-form-group label="Contact Description">
           <b-form-textarea
@@ -58,11 +59,11 @@
 
         <hr />
         <b-form-group label="Upload image">
-          <b-form-file></b-form-file>
+          <b-form-file @change="selectImages"></b-form-file>
         </b-form-group>
 
         <div class="text-center">
-          <b-button class="w-50 mt-2" variant="success">Save</b-button>
+          <b-button type="submit" class="w-50 mt-2" variant="success">Save</b-button>
         </div>
       </form>
     </b-modal>
@@ -87,6 +88,9 @@ export default {
     };
   },
   methods: {
+    selectImages(event) {
+      this.editContact.image = event.target.files;
+    },
     editModal() {
       this.$bvModal.show("edit-modal");
     },
@@ -99,6 +103,9 @@ export default {
         })
         .then(
           res => {
+            if(res.data.user[0].status == 'inactive'){
+              this.checked = false;
+            }
             this.user = res.data.user[0];
           },
           err => {
@@ -112,7 +119,61 @@ export default {
       } else {
         return url[0].url;
       }
-    }
+    },
+    updateStatus() {
+      let formData = new FormData();
+
+      if(this.checked == false){
+        formData.append("status", 'inactive');
+      }
+      else if(this.checked == true){
+        formData.append("status", 'active');
+      }
+      axios
+        .put(
+          "user/" + this.$store.getters.info.user._id, formData,
+          {
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.info.token
+            }
+          }
+        )
+        .then(
+          res => {
+            this.user = [];
+            this.getUser();
+          },
+          err => {}
+        );
+    },
+    updateUser() {
+      this.$isLoading(true);
+
+      let formData = new FormData();
+      if (this.editContact.description != "") {
+        formData.append("contract", this.editContact.description);
+      }
+      
+      if (this.editContact.image != null) {
+        formData.append("image", this.editContact.image[0]);
+      }
+
+      axios
+        .put("user/" + this.$store.getters.info.user._id, formData, {
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.info.token
+          }
+        })
+        .then(
+          res => {
+            this.$isLoading(false);
+            location.reload();
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    },
   },
   mounted() {
     this.getUser();
