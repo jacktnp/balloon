@@ -7,7 +7,7 @@
 
       <div class="row">
         <div class="col-4 col-md-2 p-1">
-          <img :src="checkImage(user.img)" class="w-100" />
+          <img :src="checkImage" class="w-100" />
         </div>
         <div class="col-8 col-md-10 p-1">
           <h6 class="mb-0">{{ user.fullname }}</h6>
@@ -42,13 +42,6 @@
 
     <b-modal id="edit-modal" title="Edit Profile" centered hide-footer>
       <form @submit.prevent="updateUser()">
-        <!-- <b-form-group label="Full name:">
-          <b-form-input
-            v-model="editContact.fullname"
-            placeholder="Enter Fullname"
-            required
-          ></b-form-input>
-        </b-form-group> -->
 
         <b-form-group label="Contact Description">
           <b-form-textarea
@@ -59,11 +52,35 @@
 
         <hr />
         <b-form-group label="Upload image">
-          <b-form-file @change="selectImages"></b-form-file>
+          <!-- Upload  -->
+          <div id="file-upload-form" class="uploader">
+            <input
+              id="file-upload"
+              type="file"
+              name="fileUpload"
+              accept="image/*"
+              @change="selectImages"
+            />
+
+            <label for="file-upload" id="file-drag">
+              <img :src="showSelectImage(editContact.images[0])" class="w-100" v-if="editContact.images != null">
+
+              <div id="start" v-else>
+                <i class="fa fa-download" aria-hidden="true"></i>
+                <div>Select a file</div>
+                <div id="notimage" class="hidden">Please select an image</div>
+                <span id="file-upload-btn" class="btn btn-primary"
+                  >Select a file</span
+                >
+              </div>
+            </label>
+          </div>
         </b-form-group>
 
         <div class="text-center">
-          <b-button type="submit" class="w-50 mt-2" variant="success">Save</b-button>
+          <b-button type="submit" class="w-50 mt-2" variant="success"
+            >Save</b-button
+          >
         </div>
       </form>
     </b-modal>
@@ -89,10 +106,14 @@ export default {
   },
   methods: {
     selectImages(event) {
-      this.editContact.image = event.target.files;
+      this.editContact.images = event.target.files;
     },
     editModal() {
       this.$bvModal.show("edit-modal");
+    },
+    showSelectImage(image) {
+      // for preview only
+      return URL.createObjectURL(image);
     },
     getUser() {
       axios
@@ -103,7 +124,7 @@ export default {
         })
         .then(
           res => {
-            if(res.data.user[0].status == 'inactive'){
+            if (res.data.user[0].status == "inactive") {
               this.checked = false;
             }
             this.user = res.data.user[0];
@@ -113,25 +134,20 @@ export default {
           }
         );
     },
-    checkImage(url) {
-      if (url.length <= 0) {
-        return "https://thaigifts.or.th/wp-content/uploads/2017/03/no-image.jpg";
-      } else {
-        return url[0].url;
-      }
-    },
     updateStatus() {
-      let formData = new FormData();
+      var status = "";
 
-      if(this.checked == false){
-        formData.append("status", 'inactive');
-      }
-      else if(this.checked == true){
-        formData.append("status", 'active');
+      if (this.checked == false) {
+        var status = "inactive";
+      } else if (this.checked == true) {
+        var status = "active";
       }
       axios
         .put(
-          "user/" + this.$store.getters.info.user._id, formData,
+          "user/" + this.$store.getters.info.user._id,
+          {
+            status: status
+          },
           {
             headers: {
               Authorization: "Bearer " + this.$store.getters.info.token
@@ -140,22 +156,24 @@ export default {
         )
         .then(
           res => {
-            this.user = [];
             this.getUser();
           },
-          err => {}
+          err => {
+            console.log(err);
+          }
         );
     },
     updateUser() {
       this.$isLoading(true);
 
       let formData = new FormData();
+
       if (this.editContact.description != "") {
         formData.append("contract", this.editContact.description);
       }
-      
-      if (this.editContact.image != null) {
-        formData.append("image", this.editContact.image[0]);
+
+      if (this.editContact.images != null) {
+        formData.append("image", this.editContact.images[0]);
       }
 
       axios
@@ -173,7 +191,17 @@ export default {
             console.log(err);
           }
         );
-    },
+    }
+  },
+  computed: {
+    checkImage() {
+      // console.log(this.user.img.length == 0 || !this.user.img)
+      if (!this.user.img || this.user.img.length == 0) {
+        return "https://thaigifts.or.th/wp-content/uploads/2017/03/no-image.jpg";
+      } else {
+        return this.user.img[0].url;
+      }
+    }
   },
   mounted() {
     this.getUser();

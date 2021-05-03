@@ -4,7 +4,7 @@
     <b-container class="w-75" v-if="step == 1">
       <h5 class="mt-4 font-weight-light">Enter Equipment ID</h5>
       <hr class="mb-4" />
-
+      
       <div class="row">
         <div class="col-10 col-md-11 p-1">
           <b-form-group>
@@ -224,6 +224,7 @@ export default {
             arr["_id"] = res.data.device[0]._id;
             arr["code_device"] = res.data.device[0].code_device;
             arr["name_type"] = res.data.device[0].name_type;
+            arr["img"] = res.data.device[0].img;
             this.items.push(arr);
           },
           err => {

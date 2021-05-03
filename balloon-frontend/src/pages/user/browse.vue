@@ -2,16 +2,15 @@
   <div>
     <navbar />
     <b-container class="w-75">
-      <h5 class="mt-4 font-weight-light">Browse</h5>
+      <div class="row">
+        <div class="col-5">
+          <h5 class="mt-4 font-weight-light">Browse</h5>
+        </div>
+        <div class="col-7 d-flex justify-content-end mt-4">
+          <input id="search" name="search" type="text" v-model="search"><input id="search_submit" value="Rechercher" type="submit">
+        </div>
+      </div>
       <hr class="mb-4" />
-
-      <b-form-group
-      >
-        <b-form-input
-          v-model="search"
-          placeholder="ค้นหาคำที่ต้องการ..."
-        ></b-form-input>
-      </b-form-group>
 
       <div class="row">
         <div class="col-6 col-md-4 px-1" v-for="(item, index) in filteredList" :key="index">
@@ -46,7 +45,7 @@
         </div>
 
         <div class="col-4"><b>Category</b></div>
-        <div class="col-8">xxxx</div>
+        <div class="col-8">{{ equipments[index].category }}</div>
       </div>
     </b-modal>
   </div>
@@ -110,3 +109,60 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.modal-header {
+  border-bottom: 0px !important;
+}
+
+
+input[type="text"] {
+  display: inline-block;
+  border: none;
+  outline: none;
+  color: #555;
+  padding: 3px;
+  padding-right: 60px;
+  width: 0px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  z-index: 3;
+  transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
+  cursor: pointer;
+}
+
+input[type="text"]:focus:hover {
+  border-bottom: 1px solid #BBB;
+}
+
+input[type="text"]:focus {
+  width: 80%;
+  z-index: 1;
+  border-bottom: 1px solid #BBB;
+  cursor: text;
+  outline: none;
+}
+input[type="submit"] {
+  height: auto;
+  width: 3em;
+  display: inline-block;
+  color:red;
+  background: url('../../assets/search-regular.svg') center center no-repeat;
+  text-indent: -10000px;
+  border: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  cursor: pointer;
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity .4s ease;
+}
+
+input[type="submit"]:hover {
+  opacity: 0.8;
+}
+</style>

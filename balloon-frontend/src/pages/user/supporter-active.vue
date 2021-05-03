@@ -7,7 +7,7 @@
 
       <div class="row mt-3" v-for="(support, index) in support" :key="index">
         <div class="col-4 col-md-2">
-          <img src="../../assets/qrcode-demo.png" class="w-100" />
+          <img :src="support.img[0].url" class="w-100 rounded" v-if="support.img.length > 0" />
         </div>
         <div class="col-8 col-md-10">
           <h6 class="mt-2 mb-0">{{ support.fullname || support.email }}</h6>

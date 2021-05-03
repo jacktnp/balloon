@@ -11,9 +11,14 @@
       <hr class="mb-4" />
 
       <img :src="checkImage(equipment.img)" class="w-100" />
-      <h5 class="mt-3">{{ equipment.name_type }}</h5>
-      <p class="mb-0"><b>Description : </b> {{ equipment.detail_type }}</p>
-      <!-- <p><b>Category : </b> {{ equipment.category }}</p> -->
+      <p class="mt-3 mb-1">{{ equipment.name_type }}</p>
+      <small class="mb-0"
+        ><b>Description : </b> {{ equipment.detail_type }}</small
+      >
+      <hr />
+      <small><b>Status : </b> {{ statusAvaliable }}</small>
+      <br />
+      <small><b>Category : </b> {{ equipment.category }}</small>
 
       <div class="row mt-4">
         <div class="col-9 col-md-10 p-1">
@@ -36,35 +41,77 @@
 
       <b-list-group class="mt-2 mb-5" style="height: 18vh; overflow-y: auto">
         <b-list-group-item
-          class="d-flex justify-content-between align-items-center border-0"
+          class="border-0"
           v-for="(item, index) in device"
           :key="index"
         >
           {{ item.code_device }}
 
-          <small
-            @click.prevent="
-              downloadItem(item.name_type, item._id, item.code_device)
-            "
-          >
-            <i class="fas fa-download"></i>
-          </small>
+          <div class="float-right">
+            <small
+              @click.prevent="
+                downloadItem(item.name_type, item._id, item.code_device)
+              "
+            >
+              <i class="fas fa-download"></i>
+            </small>
 
-          <small @click.prevent="delItem(item._id)">
-            <i class="fas fa-trash-alt"></i>
-          </small>
+            <small class="pl-2" @click.prevent="delItem(item._id)">
+              <i class="fas fa-trash-alt"></i>
+            </small>
+          </div>
         </b-list-group-item>
       </b-list-group>
       <br />
       <br /><br />
-
-      <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em">
-        <b-button class="w-100" variant="secondary" @click="downloadAll"
-          >Download All</b-button
-        >
-        <!-- <b-button class="w-100" variant="success">SAVE</b-button> -->
-      </div>
     </b-container>
+
+    <div
+      class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
+      style="background: #F1F1F1;bottom: 0px;height: 15vh;"
+    >
+      <b-button class="w-75 mb-2" variant="success" @click="downloadAll"
+        >Download</b-button
+      >
+      <b-button class="w-75" variant="secondary" v-b-modal.edit-type-modal
+        >Edit</b-button
+      >
+    </div>
+
+    <b-modal id="edit-type-modal" no-close-on-backdrop centered hide-footer>
+      <form @submit="editType">
+        <b-form-group label="Equipment Title :">
+          <b-form-input
+            v-model="editEquipment.name_type"
+            disabled
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Descriptions:">
+          <b-form-textarea
+            v-model="editEquipment.detail_type"
+            rows="5"
+          ></b-form-textarea>
+        </b-form-group>
+        <b-form-group label="Equipment Category :">
+          <b-form-select
+            v-model="editEquipment.category"
+            :options="category"
+          ></b-form-select>
+        </b-form-group>
+        <div class="row w-75 mx-auto">
+          <div class="col-2 px-1">
+            <b-button class="w-100 mb-2" variant="secondary" @click="deleteType"
+              ><i class="fas fa-trash-alt"></i
+            ></b-button>
+          </div>
+          <div class="col px-1">
+            <b-button type="submit" class="w-100 mb-2" variant="success"
+              >UPDATE</b-button
+            >
+          </div>
+        </div>
+      </form>
+    </b-modal>
   </div>
 </template>
 
@@ -78,9 +125,22 @@ export default {
   data() {
     return {
       equipment: {},
+      editEquipment: {},
       device: [],
       item: "",
-      items: []
+      items: [],
+      category: [
+        { value: "Notebook", text: "Notebook" },
+        { value: "Notebook Accessories", text: "Notebook Accessories" },
+        { value: "Desktop", text: "Desktop" },
+        { value: "TV / Monitor", text: "TV / Monitor" },
+        { value: "Computer Hardware", text: "Computer Hardware" },
+        { value: "SSD / HDD / Storage", text: "SSD / HDD / Storage" },
+        { value: "Mouse / Keyboard / Pad", text: "Mouse / Keyboard / Pad" },
+        { value: "Network", text: "Network" },
+        { value: "Accessories", text: "Accessories" },
+        { value: "Other", text: "Other" }
+      ]
     };
   },
   methods: {
@@ -96,9 +156,10 @@ export default {
         .catch(console.error);
     },
     async downloadAll() {
+      this.$isLoading(true);
       let zip = new JSZip();
       await new Promise((resolve, reject) =>
-        this.device.map((value,index) => {
+        this.device.map((value, index) => {
           fetch(
             `https://dev.initerapp.com/qrcode.php?id=${value._id}&name=${value.code_device}`
           )
@@ -108,12 +169,11 @@ export default {
               zip.file(
                 value.name_type + "_" + value.code_device + ".png",
                 file
-              )
-              if (this.device.length === index+1)   {
-                console.log(index +' ' + this.device.map.length)
-                resolve('succes')
+              );
+              if (this.device.length === index + 1) {
+                console.log(index + " " + this.device.map.length);
+                resolve("succes");
               }
-           
             });
           // axios
           //   .get(
@@ -129,7 +189,8 @@ export default {
         })
       );
       zip.generateAsync({ type: "blob" }).then(content => {
-        saveAs(content, "แก้ชื่อไฟล์ตรงนี้" + "zip");
+        saveAs(content, `${this.equipment.name_type}_zipfiles`);
+        this.$isLoading(false);
       });
     },
     getEquipment() {
@@ -142,6 +203,7 @@ export default {
         .then(
           res => {
             this.equipment = res.data.type[0];
+            this.editEquipment = res.data.type[0];
             this.getDevice(res.data.type[0].name_type);
           },
           err => {
@@ -213,11 +275,77 @@ export default {
         );
     },
     checkImage(url) {
-      if (url.length <= 0) {
+      if (!url) {
         return "https://thaigifts.or.th/wp-content/uploads/2017/03/no-image.jpg";
       } else {
         return url[0].url;
       }
+    },
+    editType() {
+      axios
+        .put(
+          "type/id/" + this.$route.params.id,
+          {
+            detail_type: this.editEquipment.detail_type,
+            category: this.editEquipment.category
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.info.token
+            }
+          }
+        )
+        .then(
+          res => {
+            location.reload();
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    },
+    deleteType() {
+      this.$bvModal
+        .msgBoxConfirm(`ยืนยันที่จะลบ ${this.equipment.name_type} ใช่ไหม ?`, {
+          size: "sm",
+          buttonSize: "sm",
+          cancelVariant: "secondary",
+          okVariant: "success",
+          okTitle: "CANCEL",
+          cancelTitle: "CONFIRM",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value == false) {
+            axios
+              .delete("type/id/" + this.$route.params.id, {
+                headers: {
+                  Authorization: "Bearer " + this.$store.getters.info.token
+                }
+              })
+              .then(
+                res => {
+                  this.$router.push({ name: "adminmanagement" });
+                },
+                err => {
+                  console.log(err);
+                }
+              );
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      console.log("delete");
+    }
+  },
+  computed: {
+    statusAvaliable() {
+      if (this.equipment.status_type == "active") return "Avaliable";
+
+      return "Not Avaliable";
     }
   },
   mounted() {

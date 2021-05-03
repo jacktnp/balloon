@@ -28,17 +28,54 @@
             required
           ></b-form-select>
         </b-form-group>
-        <b-form-group label="Upload image">
-          <b-form-file @change="selectImages" required></b-form-file>
-        </b-form-group>
 
-        <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
-          <b-button class="w-100" variant="success" @click="addEquipment"
-            >SAVE</b-button
-          >
-        </div>
+        <b-form-group label="Upload image">
+          <!-- Upload  -->
+          <div id="file-upload-form" class="uploader">
+            <input
+              id="file-upload"
+              type="file"
+              name="fileUpload"
+              accept="image/*"
+              @change="selectImages"
+            />
+
+            <label for="file-upload" id="file-drag">
+              <img
+                :src="showSelectImage(newEquipment.images[0])"
+                class="w-100"
+                v-if="newEquipment.images != null"
+              />
+
+              <div id="start" v-else>
+                <i class="fa fa-download" aria-hidden="true"></i>
+                <div>Select a file</div>
+                <div id="notimage" class="hidden">Please select an image</div>
+                <span id="file-upload-btn" class="btn btn-primary"
+                  >Select a file</span
+                >
+              </div>
+            </label>
+          </div>
+        </b-form-group>
+        <!-- <b-form-group label="Upload image">
+          <b-form-file @change="selectImages" required></b-form-file>
+        </b-form-group> -->
       </b-form>
+
+      <br />
+      <br />
+      <br />
     </b-container>
+
+    <div
+      class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
+      style="background: #F1F1F1;bottom: 0px;height: 10vh;"
+    >
+      <b-button class="w-75" variant="success" @click="addEquipment"
+        >SAVE</b-button
+      >
+    </div>
   </div>
 </template>
 
@@ -74,7 +111,13 @@ export default {
     selectImages(event) {
       this.newEquipment.images = event.target.files;
     },
+    showSelectImage(image) {
+      // for preview only
+      return URL.createObjectURL(image);
+    },
     addEquipment() {
+      this.$isLoading(true);
+
       let formData = new FormData();
       formData.append("name_type", this.newEquipment.title);
       formData.append("detail_type", this.newEquipment.description);
@@ -89,6 +132,8 @@ export default {
         })
         .then(
           res => {
+            this.$isLoading(false);
+
             alert("เพิ่มข้อมูลสำเร็จ ระบบจะรีไดเร็คไปหน้ารวม Equipment");
             this.$router.push({ name: "adminmanagement" });
           },
