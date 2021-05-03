@@ -11,13 +11,46 @@ module.exports.loginLadp = async (req, res, next) => {
         const encrypepassword = cryptr.encrypt(req.body.password);
         const email = result.userPrincipalName.split("@")[0]
         let ldaprole = ''
-        result.description === "IT Student" ? ldaprole = "student" : ldaprole = "teacher"
+        let img = ''
+        const randomPictureWoman = [
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060265/webdesign-project/fp1_bke5qf.png',
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060263/webdesign-project/fp2_rf4wrd.png',
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060262/webdesign-project/fp4_deeoxs.png',
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060261/webdesign-project/fp3_pujqcy.png',
+        ]
+        const randomPictureSupport = [
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060264/webdesign-project/s3_zv6pi9.png',
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060263/webdesign-project/s2_pszlrg.png',
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060264/webdesign-project/s1_if0l3u.png',
+        ]
+        const randomPictureMan = [
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060262/webdesign-project/mp4_onmomr.png',
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060261/webdesign-project/mp2_ob9nno.png',
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060261/webdesign-project/mp3_vkcgfa.png',
+            'https://res.cloudinary.com/dzrw6abfr/image/upload/v1620060261/webdesign-project/mp1_tnsmy7.png'
+        ]
+        if (result.description === "IT Student" || result.description === "Lecture") {
+            ldaprole = "student"
+            if (result.givenName.slice(0, 3) === 'นาย') {
+                img = [{ url: randomPictureMan[Math.floor((Math.random() * 4) + 1)] }]
+            } else {
+                img = [{ url: randomPictureWoman[Math.floor((Math.random() * 4) + 1)] }]
+            }
+        } else {
+            ldaprole = "support"
+            img = [{ url: randomPictureSupport[Math.floor((Math.random() * 3) + 1)] }]
+        }
+
+        if (email === 'it60070031') {
+            img = [{ url: 'https://res.cloudinary.com/dzrw6abfr/image/upload/v1619911565/webdesign-project/uldh9cdvjstvavcccc9i.jpg' }]
+        }
         const resdata = {
             firstname: result.givenName,
             lastname: result.sn,
             email: email,
             role: ldaprole,
             uid: result.uSNCreated,
+            img: img
         }
         const token = 'Bearer ' + jwt.sign(
             { email: req.body.email, password: encrypepassword },
@@ -26,8 +59,6 @@ module.exports.loginLadp = async (req, res, next) => {
         console.log('Authenticated successfully');
 
         const userLogin = await User.find({ email: email })
-
-
         const contract = email.slice(2) + '@it.kmitl.ac.th'
         const fullname = resdata.firstname + " " + resdata.lastname
         const newUser = {
@@ -35,14 +66,11 @@ module.exports.loginLadp = async (req, res, next) => {
             role: ldaprole,
             contract: contract,
             date: new Date,
-            fullname: fullname
+            fullname: fullname,
+            img: img
         }
-        console.log(!userLogin)
-        console.log(newUser)
-
         if (!userLogin[0]) {
             const createNewUser = await User.createUser(newUser)
-            console.log(createNewUser)
         }
 
         return res.status(200).json({

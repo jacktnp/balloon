@@ -60,7 +60,19 @@ module.exports.deleteBorrow = deleteBorrow;
 
 
 const getAllBorrow = async (req, res, next) => {
-    const getBorrow = await Borrow.find()
+    const getBorrow = await Borrow.aggregate([
+        {
+            $lookup:
+            {
+                from: 'users',
+                localField: 'email',
+                foreignField: 'email',
+                as: 'user'
+            }
+        }
+    ])
+
+
     res.send({ "borrow": getBorrow })
 };
 module.exports.getAllBorrow = getAllBorrow;
