@@ -9,7 +9,7 @@
       <!-- Student -->
       <b-navbar-nav
         class="ml-auto"
-        v-if="$store.getters.info.user.role == 'student'"
+        v-if="locals.role == 'student'"
       >
         <b-nav-item :to="{ name: 'userindex' }">Home</b-nav-item>
         <b-nav-item :to="{ name: 'userbrowse' }">Browse</b-nav-item>
@@ -17,13 +17,13 @@
         <b-nav-item :to="{ name: 'userprofile' }">Profile</b-nav-item>
         <b-nav-item :to="{ name: 'supporterActive' }">Supporter</b-nav-item>
         <b-button class="btn-sm" variant="primary" :to="{ name: 'logout' }"
-          >{{ username }} ({{ role }})</b-button
+          >{{ locals.email }} ({{ locals.role }})</b-button
         >
       </b-navbar-nav>
 
       <b-navbar-nav
         class="ml-auto"
-        v-else-if="$store.getters.info.user.role == 'support'"
+        v-else-if="locals.role == 'support'"
       >
         <b-nav-item :to="{ name: 'adminindex' }">Home</b-nav-item>
         <b-nav-item :to="{ name: 'adminmanagement' }">Management</b-nav-item>
@@ -32,7 +32,7 @@
         <b-nav-item :to="{ name: 'adminprofile' }">Profile</b-nav-item>
 
         <b-button class="btn-sm" variant="primary" :to="{ name: 'logout' }"
-          >{{ username }} ({{ role }})</b-button
+          >{{ locals.email }} ({{ locals.role }})</b-button
         >
       </b-navbar-nav>
     </b-collapse>
@@ -43,19 +43,18 @@
 export default {
   data() {
     return {
-      username: "",
-      role: ""
+      locals: ""
     };
   },
   methods: {
     checkToken(){
-      
+      setTimeout(() => {
+        this.locals = this.$store.getters.info.user;
+      }, 300)
     }
   },
   mounted() {
     this.checkToken();
-    this.username = this.$store.getters.info.user.email;
-    this.role = this.$store.getters.info.user.role;
   }
 };
 </script>

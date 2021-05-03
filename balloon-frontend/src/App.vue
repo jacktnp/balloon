@@ -20,7 +20,7 @@ export default {
 }
 
 .container {
-  max-width: 480px !important;
+  /* max-width: 480px !important; */
 }
 
 .bg-success, .btn-success {

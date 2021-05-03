@@ -21,7 +21,7 @@
             required
           ></b-form-textarea>
         </b-form-group>
-        <b-form-group label="Equipment Description :">
+        <b-form-group label="Equipment Category :">
           <b-form-select
             v-model="newEquipment.category"
             :options="category"
@@ -78,7 +78,7 @@ export default {
       let formData = new FormData();
       formData.append("name_type", this.newEquipment.title);
       formData.append("detail_type", this.newEquipment.description);
-      // formData.append("category_type", this.newEquipment.category);
+      formData.append("category", this.newEquipment.category);
       formData.append("image", this.newEquipment.images[0]);
 
       axios

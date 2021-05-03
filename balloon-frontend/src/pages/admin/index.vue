@@ -108,10 +108,10 @@
       <h4 class="mt-4 font-weight-light">Confirm</h4>
       <hr class="mb-4" />
 
-      <div style="overflow-y: auto;max-height: 40vh;">
+      <div style="overflow-y: auto;overflow-x: hidden;max-height: 40vh;">
         <div class="row" v-for="(item, index) in items" :key="index">
           <div class="col-4 col-md-2 p-2">
-            <img src="../../assets/qrcode-demo.png" class="w-100" />
+            <img :src="item.img[0].url" class="w-100" />
           </div>
           <div class="col-8 col-md-10 p-2">
             <h6 class="mb-0">{{ item.name_type }}</h6>
@@ -197,6 +197,7 @@ export default {
                 arr["_id"] = res.data.device[0]._id;
                 arr["code_device"] = res.data.device[0].code_device;
                 arr["name_type"] = res.data.device[0].name_type;
+                arr["img"] = res.data.device[0].img;
                 this.items.push(arr);
               }
             },
@@ -315,6 +316,7 @@ export default {
             this.$router.push({ name: "index" });
           },
           err => {
+            alert(`${userinfo.email} ยังไม่ได้คืนของล่าสุด`);
             console.log(err);
           }
         );
