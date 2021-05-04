@@ -79,7 +79,26 @@ module.exports.getAllBorrow = getAllBorrow;
 
 
 const getBorrowById = async (req, res, next) => {
-    const getBorrow = await Borrow.find({ _id: req.params.id })
+    const getBorrow = await Borrow.Borrow.aggregate([
+        {
+            $match: {
+                _id: req.params.id
+            }
+        },
+        {
+            $lookup:
+            {
+                from: 'users',
+                localField: 'email',
+                foreignField: 'email',
+                as: 'user'
+            }
+        }
+    ])
+
+
+
+    // find({ _id: req.params.id })
     res.send({ "borrow": getBorrow })
 };
 module.exports.getBorrowById = getBorrowById;
