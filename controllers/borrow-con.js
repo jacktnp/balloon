@@ -166,9 +166,22 @@ module.exports.historyUserBorrow = async (req, res, next) => {
 
 
 module.exports.historyAllBorrow = async (req, res, next) => {
-    const getBorrow = await Borrow.find({
-        status: 'return'
-    })
+    const getBorrow = await Borrow.aggregate([
+        {
+            $match: {
+                status: "return"
+            }
+        },
+        {
+            $lookup:
+            {
+                from: 'users',
+                localField: 'email',
+                foreignField: 'email',
+                as: 'user'
+            }
+        }
+    ])
     res.send({ "borrow": getBorrow })
 };
 
