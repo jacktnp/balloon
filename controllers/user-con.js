@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const Borrow = require("../models/borrow");
+
 const variable_status = require("../config/variable_status");
 
 
@@ -31,9 +33,6 @@ const updateUser = async (req, res, next) => {
     } = req.body
     if (req.files.length > 0) {
         var paths = req.files.map(file =>
-
-            // console.log(file)
-
             ({ url: file.path, filename: file.filename })
         )
         user.img = paths
@@ -65,14 +64,22 @@ module.exports.getAllUser = getAllUser;
 
 const getUserById = async (req, res, next) => {
     const getUser = await User.find({ _id: req.params.id })
-    res.send({ "user": getUser })
+    const getBorrow = await Borrow.find({ _id: getUser.email, status: "borrow" }).countDocuments()
+    const myUser = { ...getUser[0]._doc }
+    myUser.have_borrow = getBorrow
+    console.log(myUser)
+    res.send({ "user": myUser })
 };
 module.exports.getUserById = getUserById;
 
 
 const getUserByEmail = async (req, res, next) => {
     const getUser = await User.find({ email: req.params.id })
-    res.send({ "user": getUser })
+    const getBorrow = await Borrow.find({ _id: getUser.email, status: "borrow" }).countDocuments()
+    const myUser = { ...getUser[0]._doc }
+    myUser.have_borrow = getBorrow
+    console.log(myUser)
+    res.send({ "user": myUser })
 };
 module.exports.getUserByEmail = getUserByEmail;
 

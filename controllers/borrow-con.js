@@ -308,3 +308,26 @@ module.exports.alertReturn = async (req, res, next) => {
     res.send({ sendEmail: sendEmail })
 }
 
+module.exports.alertReturnByEmail = async (req, res, next) => {
+    console.log(new Date().toISOString())
+    const getBorrow = await Borrow.find({
+        status: 'borrow',
+        email:res.params.id
+    })
+    let sendEmail = []
+    getBorrow.map(data => {
+        if (data.date_return.getTime() <= new Date().getTime()) {
+            // sendEmail.email = data.email
+            // sendEmail.date_return = data.date_return
+            const objData = { email: data.email, date_return: data.date_return }
+            sendEmail.push(objData)
+        }
+    })
+    console.log(sendEmail)
+    sendEmail.map(data => {
+
+        sendmail(data.email)
+    })
+    res.send({ sendEmail: sendEmail })
+}
+

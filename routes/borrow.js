@@ -29,6 +29,11 @@ router.route('/device/history-user-borrow/:id')
 router.route('/device/alert-return')
     .get(borrowController.alertReturn)
 
+    router.route('/device/alert-return-by-email/:id')
+    .post(borrowController.alertReturnByEmail)
+
+
+
 
 var cron = require('node-cron');
 const axios = require('axios');
