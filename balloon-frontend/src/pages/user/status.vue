@@ -13,14 +13,14 @@
           <div
             class="col py-1 rounded-pill status"
             :class="{ active: status == 'In Process' }"
-            @click.prevent="status = 'In Process'"
+            @click="status = 'In Process'"
           >
             <small>In Process</small>
           </div>
           <div
             class="col py-1 rounded-pill status"
             :class="{ active: status == 'History' }"
-            @click.prevent="status = 'History'"
+            @click="status = 'History'"
           >
             <small>History</small>
           </div>
@@ -28,9 +28,40 @@
       </div>
 
       <div v-if="status == 'In Process'">
-        
+        <div v-if="borrow != null">
+          <h6 class="text-center mb-4">
+            Due date : {{ convertDate(borrow.date_return) }}
+          </h6>
+          <!--  -->
+          <div
+            class="card mb-3 border-0"
+            style="background: transparent"
+            v-for="(data, index) in borrow.device"
+            :key="index"
+          >
+            <div class="row" id="headingrow">
+              <div class="col-4">
+                <img :src="data.img[0].url || ''" class="w-100 rounded" v-if="!data.img" />
+              </div>
+              <div class="col-8 p-0">
+                <p class="mb-0">
+                  <b-badge variant="success" v-if="data.status == 'return'"
+                    >Done</b-badge
+                  >
+                  {{ data.name_type }}
+                </p>
+                <small>{{ data.code_device }}</small>
+              </div>
+            </div>
+            <hr />
+          </div>
+          <!--  -->
+        </div>
+        <div v-else>
+          <h6 class="text-center mt-5">no history</h6>
+        </div>
       </div>
-      
+
       <div v-if="status == 'History'">
         <div
           class="card mb-3 border-0"
@@ -105,11 +136,15 @@ export default {
     return {
       history: [],
       historySelect: null,
-      status: "In Process"
+      status: "In Process",
+      borrow: {
+        status: ""
+      }
     };
   },
   methods: {
     getHistory() {
+      this.$isLoading(true);
       axios
         .get(
           "borrow/device/history-user-borrow/" +
@@ -122,11 +157,33 @@ export default {
         )
         .then(
           res => {
+            this.$isLoading(false);
             this.history = res.data.borrow.sort(
               (a, b) =>
                 (a.date_return < b.date_return) -
                 (a.date_return > b.date_return)
             );
+          },
+          err => {
+            this.$router.push({ name: "logout" });
+            console.log(err);
+          }
+        );
+    },
+    getBorrow() {
+      axios
+        .get(
+          "borrow/device/history-user-status-borrow/" +
+            this.$store.getters.info.user.email,
+          {
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.info.token
+            }
+          }
+        )
+        .then(
+          res => {
+            this.borrow = res.data.borrow[0];
           },
           err => {
             this.$router.push({ name: "logout" });
@@ -166,6 +223,7 @@ export default {
   },
   mounted() {
     this.getHistory();
+    this.getBorrow();
   }
 };
 </script>

@@ -28,12 +28,12 @@ html {
 }
 
 /* Customize  */
-.bg-success, .btn-success {
+.bg-success, .btn-success, .badge-success {
   background: #4E9C81 !important;
   border-color: transparent !important;
 }
 
-.bg-primary, .btn-primary {
+.bg-primary, .btn-primary, .badge-primary {
   background: #72A3BC !important;
   border-color: transparent !important;
 }

@@ -6,10 +6,10 @@
       <hr class="mb-4" />
 
       <div class="row" id="headingrow">
-        <div class="col-4 col-md-2">
+        <div class="col-4 col-md-2 p-1">
           <img :src="checkImage(user.img)" class="w-100 rounded-pill" />
         </div>
-        <div class="col-8 col-md-10">
+        <div class="col-8 col-md-10 p-1">
           <p class="mb-0">{{ user.fullname }}</p>
           <small>User ID : {{ user.email }}</small>
           <br />

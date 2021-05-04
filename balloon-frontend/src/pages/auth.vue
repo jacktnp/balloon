@@ -7,7 +7,7 @@
       <p class="text-center">
         <img src="../assets/logo2.png" class="w-75 mb-3" />
       </p>
-      
+
       <b-form-group>
         <b-form-input
           v-model="username"
@@ -26,6 +26,28 @@
 
       <b-button type="submit" class="w-100" variant="success">Login</b-button>
     </b-form>
+
+    <!-- ConfirmMsg Equip -->
+    <b-modal
+      id="modal-status"
+      no-close-on-backdrop
+      centered
+      hide-header
+      hide-footer
+    >
+      <div class="d-flex flex-column align-items-center my-5">
+        <img src="../assets/alert/ban.png" class="w-25" />
+        <p class="mt-3 mb-4">{{ error }}</p>
+        <div class="d-flex justify-content-center w-100">
+          <b-button
+            class="mt-3 w-25 mr-2"
+            variant="secondary"
+            @click="closeStatusModal()"
+            >OK</b-button
+          >
+        </div>
+      </div>
+    </b-modal>
   </b-container>
 </template>
 
@@ -36,31 +58,43 @@ export default {
   data() {
     return {
       username: "",
-      password: "P@ssw0rd123#$%"
+      password: "",
+      error: ""
     };
   },
   methods: {
     authLogin() {
-      axios
-        .post("login", {
-          email: this.username
-          // password: this.password
-        })
-        .then(
-          response => {
-            // Store & Redirect
-            this.$store.commit("setUser", response.data);
+      if (this.password == "password") {
+        axios
+          .post("login", {
+            email: this.username
+            // password: this.password
+          })
+          .then(
+            response => {
+              // Store & Redirect
+              if(response.data.data.user == null) {
+                this.error = 'ยังไม่มียูสเซอร์นี้ในระบบน้าาา :D';
+                this.openStatusModal();
+              }
 
-            if (response.data.data.user.role == "support") {
-              this.$router.push({ name: "adminindex" });
-            } else {
-              this.$router.push({ name: "userindex" });
+              this.$store.commit("setUser", response.data);
+
+              if (response.data.data.user.role == "support") {
+                this.$router.push({ name: "adminindex" });
+              } else {
+                this.$router.push({ name: "userindex" });
+              }
+            },
+            error => {
+              this.error = 'ยังไม่มียูสเซอร์นี้ในระบบน้าาา :D';
+              this.openStatusModal();
             }
-          },
-          error => {
-            alert("error");
-          }
-        );
+          );
+      } else {
+        this.error = 'ฮั่นแน่ มาแอบส่องเหรอ อิอิ :)';
+        this.openStatusModal();
+      }
     },
     checkAuth() {
       if (localStorage.getItem("balloon") != null) {
@@ -70,7 +104,13 @@ export default {
           this.$router.push({ name: "adminindex" });
         }
       }
-    }
+    },
+    openStatusModal() {
+      this.$bvModal.show("modal-status");
+    },
+    closeStatusModal() {
+        this.$bvModal.hide("modal-status");
+    },
   },
   mounted() {
     this.checkAuth();

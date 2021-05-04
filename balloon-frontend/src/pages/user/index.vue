@@ -6,8 +6,8 @@
             <hr class="mb-5">
 
             <div class="text-center">
-                <img v-if="borrow_status > 0" class="w-75" style="border: .5em solid #fff" :src="'https://api.qrserver.com/v1/create-qr-code/?size=500x500&data='+$store.getters.info.user.email">
-                <img v-else class="w-75" style="border: .5em solid #fff" src="../../assets/qrcode-demo.png">
+                <img v-if="borrow_status <= 0" class="w-75" style="border: .5em solid #fff" :src="'https://dev.initerapp.com/qrcode-uid.php?id='+$store.getters.info.user.email">
+                <img v-else class="w-75" style="border: .5em solid #fff" src="../../assets/alert/ban.png">
             </div>
             <br>
             <h5 class="mt-3 text-center"><b>User ID :</b> {{ $store.getters.info.user.email }}</h5>

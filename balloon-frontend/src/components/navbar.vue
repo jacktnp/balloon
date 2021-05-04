@@ -1,7 +1,8 @@
 <template>
   <b-navbar toggleable="lg" type="light" variant="light">
     <b-navbar-brand :to="{ name: 'index' }">
-      <img src="../assets/logo2.png" style="width: 100px" />
+      <img src="../assets/logo3.png" style="width: 100px" v-if="locals.role == 'support'" />
+      <img src="../assets/logo2.png" style="width: 100px" v-if="locals.role == 'student'" />
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 

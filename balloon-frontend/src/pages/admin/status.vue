@@ -38,7 +38,7 @@
         >
           <div class="row" id="headingrow">
             <div class="col-4">
-              <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" v-if="!data.user" />
+              <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" />
             </div>
             <div class="col-8 p-0">
               <p class="mb-0">{{ data.user[0].fullname }}</p>
@@ -65,7 +65,7 @@
         >
           <div class="row" id="headingrow">
             <div class="col-4">
-              <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" v-if="!data.user" />
+              <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" />
             </div>
             <div class="col-8 p-0">
               <p class="mb-0">{{ data.user[0].fullname }}</p>

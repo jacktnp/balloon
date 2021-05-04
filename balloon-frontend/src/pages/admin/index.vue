@@ -57,7 +57,7 @@
       <hr class="mb-4" />
 
       <div class="row" id="headingrow">
-        <div class="col-10 col-md-11 p-1">
+        <div class="col-10 p-1">
           <b-form-group>
             <b-form-input
               class="w-100"
@@ -69,7 +69,7 @@
             ></b-form-input>
           </b-form-group>
         </div>
-        <div class="col-2 col-md-1 p-1">
+        <div class="col-2 p-1">
           <b-button
             class="w-100"
             variant="danger"
@@ -97,13 +97,10 @@
           <div class="col-8 p-0">
             <p class="mb-0">{{ userinfo.fullname }}</p>
             <small>{{ userid }}</small>
-            <br>
-            <b-button
-              size="sm"
-              variant="danger"
-              @click="delUser"
-              ><small>Change</small
-            ></b-button>
+            <br />
+            <b-button size="sm" variant="danger" @click="delUser"
+              ><small>Change</small></b-button
+            >
             <br />
           </div>
         </div>
@@ -150,7 +147,7 @@
       ></b-form-datepicker>
 
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
-        <b-button class="w-100" variant="success" @click="borrow"
+        <b-button class="w-100" variant="success" @click.prevent="borrow"
           >Confirm</b-button
         >
       </div>
@@ -165,13 +162,30 @@
       ></qrcode-stream>
     </b-modal>
 
-    <b-modal id="modal-status" no-close-on-backdrop centered hide-header hide-footer>
+    <b-modal
+      id="modal-status"
+      no-close-on-backdrop
+      centered
+      hide-header
+      hide-footer
+    >
       <div class="d-flex flex-column align-items-center my-5">
-        <img v-if="status == 'success'" src="../../assets/alert/success.png" class="w-25">
-        <img v-else src="../../assets/alert/ban.png" class="w-25">
-        <small class="mt-3 mb-4" v-if="status == 'success'">Transaction complete</small>
+        <img
+          v-if="status == 'success'"
+          src="../../assets/alert/success.png"
+          class="w-25"
+        />
+        <img v-else src="../../assets/alert/ban.png" class="w-25" />
+        <small class="mt-3 mb-4" v-if="status == 'success'"
+          >Transaction complete</small
+        >
         <small class="mt-3 mb-4" v-else>Transaction failed</small>
-        <b-button class="mt-3 w-25" variant="secondary" @click="closeStatusModal">OK</b-button>
+        <b-button
+          class="mt-3 w-25"
+          variant="secondary"
+          @click="closeStatusModal"
+          >OK</b-button
+        >
       </div>
     </b-modal>
   </div>
@@ -221,12 +235,16 @@ export default {
               if (res.data.device.length == 0) {
                 alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง");
               } else {
-                var arr = {};
-                arr["_id"] = res.data.device[0]._id;
-                arr["code_device"] = res.data.device[0].code_device;
-                arr["name_type"] = res.data.device[0].name_type;
-                arr["img"] = res.data.device[0].img;
-                this.items.push(arr);
+                if (res.data.device[0].status_device == "Active") {
+                  var arr = {};
+                  arr["_id"] = res.data.device[0]._id;
+                  arr["code_device"] = res.data.device[0].code_device;
+                  arr["name_type"] = res.data.device[0].name_type;
+                  arr["img"] = res.data.device[0].img;
+                  this.items.push(arr);
+                } else if (res.data.device[0].status_device == "borrow") {
+                  alert("This item didn't return to admin.");
+                }
               }
             },
             err => {
@@ -248,15 +266,19 @@ export default {
         })
         .then(
           res => {
-            var arr = {};
-            arr["_id"] = res.data.device[0]._id;
-            arr["code_device"] = res.data.device[0].code_device;
-            arr["name_type"] = res.data.device[0].name_type;
-            arr["img"] = res.data.device[0].img;
-            this.items.push(arr);
+            if (res.data.device[0].status_device == "Active") {
+              var arr = {};
+              arr["_id"] = res.data.device[0]._id;
+              arr["code_device"] = res.data.device[0].code_device;
+              arr["name_type"] = res.data.device[0].name_type;
+              arr["img"] = res.data.device[0].img;
+              this.items.push(arr);
+            } else if (res.data.device[0].status_device == "borrow") {
+              alert("This item didn't return to admin.");
+            }
           },
           err => {
-            alert("ไม่มีของชิ้นนี้ในระบบ โปรดตรวจสอบอีกครั้ง");
+            alert("Undefined");
           }
         );
       this.item = "";
@@ -277,19 +299,19 @@ export default {
             res => {
               if (res.data.user.length == 0) {
                 this.delUser();
-                alert("ชื่อผู้ใช้ไม่ถูกต้อง");
+                alert("Username Undefined");
               } else {
                 this.userinfo = res.data.user;
               }
             },
             err => {
               this.delUser();
-              alert("ชื่อผู้ใช้ไม่ถูกต้อง");
+              alert("Username Undefined");
             }
           );
         this.userShow = true;
       } else {
-        alert("กรุณาระบุรหัสนักศึกษาให้ถูกต้อง");
+        alert("Username Undefined");
       }
     },
     async addUserbyQR(decode) {
@@ -306,7 +328,7 @@ export default {
           },
           err => {
             this.delUser();
-            alert("ชื่อผู้ใช้ไม่ถูกต้อง");
+            alert("Username Undefined");
           }
         );
       this.userShow = true;
@@ -327,8 +349,8 @@ export default {
       var today = new Date();
       var deadline = new Date(this.deadline);
 
-      console.log("today : ", today);
-      console.log("dl : ", deadline);
+      // console.log("today : ", today);
+      // console.log("dl : ", deadline);
 
       this.deadline_day = Math.round(Math.abs((deadline - today) / oneDay));
       console.log("between: ", this.deadline_day);
@@ -343,22 +365,22 @@ export default {
         })
         .then(
           res => {
-            this.openStatusModal('success')
+            this.openStatusModal("success");
             // this.$router.push({ name: "index" });
           },
           err => {
-            this.openStatusModal('fail')
+            this.openStatusModal("fail");
             // alert(`${userinfo.email} ยังไม่ได้คืนของล่าสุด`);
             console.log(err);
           }
         );
     },
     openStatusModal(status) {
-      this.$bvModal.show('modal-status');
+      this.$bvModal.show("modal-status");
       this.status = status;
     },
     closeStatusModal() {
-      this.$bvModal.hide('modal-status')
+      this.$bvModal.hide("modal-status");
       this.$router.push({ name: "index" });
     }
   }
