@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 router.get('/check-token', permitAuthMiddle.permit(['student', 'support']), function (req, res, next) {
   const user = req.user
 
-  res.send({ "status": "authorize","user":user })
+  res.send({ "status": "authorize", "user": user })
 });
 
 

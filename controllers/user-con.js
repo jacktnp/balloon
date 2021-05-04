@@ -31,16 +31,14 @@ const updateUser = async (req, res, next) => {
         fullname,
         contract
     } = req.body
-    try {
-        if (req.files.length > 0) {
+    
+        if (req.files) {
             var paths = req.files.map(file =>
                 ({ url: file.path, filename: file.filename })
             )
             user.img = paths
         }
-    } catch (e) {
-        console.log(e)
-    }
+
     const newUser = await User.updateUser(user, req.params.id)
 
 
