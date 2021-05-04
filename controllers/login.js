@@ -31,14 +31,15 @@ module.exports.loginLadp = async (req, res, next) => {
         ]
         if (result.description === "IT Student" || result.description === "Lecture") {
             ldaprole = "student"
+
             if (result.givenName.slice(0, 3) === 'นาย') {
-                img = [{ url: randomPictureMan[Math.floor((Math.random() * 4) + 1)] }]
+                img = [{ url: randomPictureMan[Math.floor((Math.random() * 4))] }]
             } else {
-                img = [{ url: randomPictureWoman[Math.floor((Math.random() * 4) + 1)] }]
+                img = [{ url: randomPictureWoman[Math.floor((Math.random() * 4))] }]
             }
         } else {
             ldaprole = "support"
-            img = [{ url: randomPictureSupport[Math.floor((Math.random() * 3) + 1)] }]
+            img = [{ url: randomPictureSupport[Math.floor((Math.random() * 3))] }]
         }
 
         if (email === 'it60070031') {
@@ -75,7 +76,7 @@ module.exports.loginLadp = async (req, res, next) => {
 
         return res.status(200).json({
             status: 'Success',
-            data: resdata,
+            data: newUser,
             token: token
         })
     }).catch(err => {
