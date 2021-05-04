@@ -27,9 +27,14 @@ Vue.use(VueQrcodeReader);
 // VueLoading
 import loading from 'vuejs-loading-screen'
 
+// Vuelidate
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
+
+
 Vue.use(loading, {
   bg: '#000000e0',
-  icon: 'far fa-life-ring',
+  icon: 'fas fa-compact-disc',
   size: 3,
   icon_color: 'white',
 })

@@ -1,8 +1,8 @@
 <template>
   <div>
     <navbar />
-    <b-container class="w-75">
-      <div class="row">
+    <b-container class="w-75 p-0">
+      <div class="row" id="headingrow">
         <div class="col-5">
           <h5 class="mt-4 font-weight-light">Management</h5>
         </div>
@@ -13,7 +13,7 @@
 
       <hr class="mb-4" />
 
-      <div class="row">
+      <div class="row" id="headingrow">
         <div
           class="col-6 col-md-4 px-1"
           v-for="(equipment, index) in filteredList"
@@ -36,7 +36,7 @@
       <b-button
         class="rounded-circle"
         style="transform: scale(1.25)"
-        variant="success"
+        variant="primary"
         :to="{ name: 'adminaddequipment' }"
         ><i class="fas fa-plus"></i
       ></b-button>
@@ -134,7 +134,7 @@ input[type="text"]:focus {
 }
 input[type="submit"] {
   height: auto;
-  width: 3em;
+  width: 1.25em;
   display: inline-block;
   color:red;
   background: url('../../assets/search-regular.svg') center center no-repeat;

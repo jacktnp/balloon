@@ -1,42 +1,42 @@
 <template>
   <div>
     <navbar />
-    <b-container class="w-75">
+    <b-container class="w-75 p-0">
       <h5 class="mt-4 font-weight-light">Status</h5>
       <hr class="mb-4" />
 
       <div
-        class="container rounded-pill text-center mb-4"
+        class="container rounded-pill text-center mb-4 p-0 w-75"
         style="background: #e2e2e2;"
       >
-        <div class="row">
+        <div class="row" id="headingrow">
           <div
-            class="col p-1 rounded-pill status"
+            class="col py-1 rounded-pill status"
             :class="{ active: status == 'In Process' }"
             @click.prevent="status = 'In Process'"
           >
-            In Process
+            <small>In Process</small>
           </div>
           <div
-            class="col p-1 rounded-pill status"
+            class="col py-1 rounded-pill status"
             :class="{ active: status == 'Late' }"
             @click.prevent="status = 'Late'"
           >
-            Late
+            <small>Late</small>
           </div>
         </div>
       </div>
 
       <div v-if="status == 'In Process'">
         <div
-          class="card mb-2 border-0"
+          class="card mb-3 border-0"
           style="background: transparent"
           v-for="(data, index) in incomplete"
           :key="index"
           @click="selectData = data"
           v-b-modal.select-data
         >
-          <div class="row">
+          <div class="row" id="headingrow">
             <div class="col-4">
               <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" />
             </div>
@@ -45,24 +45,25 @@
               <small>{{ data.email }}</small>
               <br />
               <small
-                ><b>COUNT : </b> {{ data.device.length }} ชิ้น 
+                ><b>Count : </b> {{ data.device.length }} ชิ้น 
                 <i class="far fa-clock"></i> {{ convertDate(data.date_return) }}
               </small>
             </div>
           </div>
+          <hr>
         </div>
       </div>
 
       <div v-else-if="status == 'Late'">
         <div
-          class="card mb-2 border-0"
+          class="card mb-3 border-0"
           style="background: transparent"
           v-for="(data, index) in late"
           :key="index"
           @click="selectData = data"
           v-b-modal.select-data
         >
-          <div class="row">
+          <div class="row" id="headingrow">
             <div class="col-4">
               <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" />
             </div>
@@ -71,17 +72,18 @@
               <small>{{ data.email }}</small>
               <br />
               <small
-                ><b>COUNT : </b> {{ data.device.length }} ชิ้น 
+                ><b>Count : </b> {{ data.device.length }} ชิ้น 
                 <i class="far fa-clock"></i> {{ convertDate(data.date_return) }}
               </small>
             </div>
           </div>
+          <hr>
         </div>
       </div>
     </b-container>
 
-    <b-modal id="select-data" hide-footer centered>
-      <div v-if="selectData != null">
+    <b-modal id="select-data" v-if="selectData != null" :title="'Due : '+convertDate(selectData.date_return)" hide-footer centered>
+      <div>
         <div class="row">
           <div class="col-4">
             <img
@@ -91,8 +93,8 @@
           </div>
           <div class="col-8 d-flex flex-column justify-content-center">
             <p class="mb-0">{{ selectData.user[0].fullname }}</p>
-            <small><b>USER ID : </b>{{ selectData.email }}</small>
-            <small><b>CONTACT : </b> {{ selectData.user[0].contract }}</small>
+            <small><b>User ID : </b>{{ selectData.email }}</small>
+            <small><b>Contact : </b> {{ selectData.user[0].contract }}</small>
           </div>
         </div>
         <hr />
@@ -104,7 +106,7 @@
           <div class="row">
             <div class="col-8">
               <p class="mb-0">{{ device.name_type }}</p>
-              <small>{{ device.code_device }}</small>
+              <small>Device ID : {{ device.code_device }}</small>
             </div>
             <div class="col-4 d-flex flex-column justify-content-center">
               <b-button
@@ -112,10 +114,10 @@
                 size="sm"
                 v-if="device.status == 'borrow'"
                 @click="returnOnce(device._id)"
-                >RETURN</b-button
+                >Return</b-button
               >
               <b-button variant="success" size="sm" disabled v-else
-                >DONE</b-button
+                >Done</b-button
               >
             </div>
           </div>
@@ -126,7 +128,7 @@
           variant="primary"
           size="sm"
           @click="returnAll()"
-          >RETURN ALL</b-button
+          >Return All</b-button
         >
         <!-- <pre>{{ selectData }}</pre> -->
       </div>
@@ -159,7 +161,7 @@ export default {
             var today = new Date();
             res.data.borrow.map(value => {
               if (value.status == "borrow") {
-                if (today.getTime < new Date(value.date_return).getTime) {
+                if (today.getTime() <= new Date(value.date_return).getTime()) {
                   this.incomplete.push(value);
                 } else {
                   this.late.push(value);
@@ -249,7 +251,7 @@ export default {
 
 .active {
   color: #fff;
-  background-color: rgb(116, 116, 116);
+  background-color: #000000B3;
 }
 
 .card:focus {

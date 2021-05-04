@@ -1,7 +1,7 @@
 <template>
   <div>
     <navbar />
-    <b-container class="w-75">
+    <b-container class="w-75 p-0">
       <h5 class="mt-4 font-weight-light">
         <router-link :to="{ name: 'adminmanagement' }"
           ><i class="fal fa-chevron-left mr-3"></i
@@ -12,25 +12,26 @@
 
       <b-form>
         <b-form-group label="Equipment Title :">
-          <b-form-input v-model="newEquipment.title" required></b-form-input>
+          <b-form-input v-model="$v.newEquipment.title.$model" :state="$v.newEquipment.title.required" required></b-form-input>
         </b-form-group>
         <b-form-group label="Equipment Description :">
           <b-form-textarea
             v-model="newEquipment.description"
             rows="3"
+            :state="$v.newEquipment.description.required"
             required
           ></b-form-textarea>
         </b-form-group>
         <b-form-group label="Equipment Category :">
           <b-form-select
             v-model="newEquipment.category"
+            :state="$v.newEquipment.category.required"
             :options="category"
             required
           ></b-form-select>
         </b-form-group>
 
         <b-form-group label="Upload image">
-          <!-- Upload  -->
           <div id="file-upload-form" class="uploader">
             <input
               id="file-upload"
@@ -48,19 +49,11 @@
               />
 
               <div id="start" v-else>
-                <i class="fa fa-download" aria-hidden="true"></i>
-                <div>Select a file</div>
-                <div id="notimage" class="hidden">Please select an image</div>
-                <span id="file-upload-btn" class="btn btn-primary"
-                  >Select a file</span
-                >
+                <i class="fas fa-image-polaroid"></i>
               </div>
             </label>
           </div>
         </b-form-group>
-        <!-- <b-form-group label="Upload image">
-          <b-form-file @change="selectImages" required></b-form-file>
-        </b-form-group> -->
       </b-form>
 
       <br />
@@ -76,12 +69,20 @@
         >SAVE</b-button
       >
     </div>
+
+    <b-modal id="modal-status" class="p-3" no-close-on-backdrop centered hide-header hide-footer>
+      <img src="../../assets/logo1.png" class="w-100">
+      <div class="d-flex justify-content-center">
+        <b-button variant="success" @click="closeStatusModal">OK</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import navbar from "@/components/navbar";
 import axios from "@/store/api";
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   components: { navbar },
@@ -107,6 +108,22 @@ export default {
       ]
     };
   },
+  validations: {
+    newEquipment: {
+      title: {
+        required
+      },
+      description: {
+        required
+      },
+      category: {
+        required
+      },
+      images: {
+        required
+      }
+    }
+  },
   methods: {
     selectImages(event) {
       this.newEquipment.images = event.target.files;
@@ -116,32 +133,44 @@ export default {
       return URL.createObjectURL(image);
     },
     addEquipment() {
-      this.$isLoading(true);
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        this.$isLoading(true);
 
-      let formData = new FormData();
-      formData.append("name_type", this.newEquipment.title);
-      formData.append("detail_type", this.newEquipment.description);
-      formData.append("category", this.newEquipment.category);
-      formData.append("image", this.newEquipment.images[0]);
+        let formData = new FormData();
+        formData.append("name_type", this.newEquipment.title);
+        formData.append("detail_type", this.newEquipment.description);
+        formData.append("category", this.newEquipment.category);
+        formData.append("image", this.newEquipment.images[0]);
 
-      axios
-        .post("/type", formData, {
-          headers: {
-            Authorization: "Bearer " + this.$store.getters.info.token
-          }
-        })
-        .then(
-          res => {
-            this.$isLoading(false);
+        axios
+          .post("/type", formData, {
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.info.token
+            }
+          })
+          .then(
+            res => {
+              this.$isLoading(false);
 
-            alert("เพิ่มข้อมูลสำเร็จ ระบบจะรีไดเร็คไปหน้ารวม Equipment");
-            this.$router.push({ name: "adminmanagement" });
-          },
-          err => {
-            console.log(err);
-          }
-        );
+              alert("เพิ่มข้อมูลสำเร็จ ระบบจะรีไดเร็คไปหน้ารวม Equipment");
+              this.$bvModal.show('modal-status')
+            },
+            err => {
+              console.log(err);
+            }
+          );
+      } else {
+        alert("กรอกข้อมูลไม่ครบ")
+      }
+    },
+    closeStatusModal() {
+      this.$bvModal.hide('modal-status')
+      this.$router.push({ name: "adminmanagement" });
     }
+  },
+  mounted() {
+    
   }
 };
 </script>

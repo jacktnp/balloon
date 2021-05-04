@@ -23,6 +23,7 @@ export default {
   max-width: 480px !important;
 }
 
+/* Customize  */
 .bg-success, .btn-success {
   background: #4E9C81 !important;
   border-color: transparent !important;
@@ -33,7 +34,25 @@ export default {
   border-color: transparent !important;
 }
 
-/*  */
+.btn-secondary {
+  background: #C3C3C3 !important;
+  border-color: transparent !important;
+}
+
+#headingrow {
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+}
+
+#modal-information .modal-header {
+  border-bottom: 0px !important;
+}
+
+#modal-history .modal-header {
+  border-bottom: 0px !important;
+}
+
+/* Upload Form */
 .uploader {
   display: block;
   clear: both;
@@ -49,7 +68,7 @@ export default {
   text-align: center;
   background: #fff;
   border-radius: 7px;
-  border: 3px solid #eee;
+  border: 1.25px dashed #ced4da;
   transition: all 0.2s ease;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -57,10 +76,10 @@ export default {
   user-select: none;
 }
 .uploader label:hover {
-  border-color: #454cad;
+  border-color: #c0c0c0;
 }
 .uploader label.hover {
-  border: 3px solid #454cad;
+  border: 3px solid #a0a0a0;
   box-shadow: inset 0 0 0 6px #eee;
 }
 .uploader label.hover #start i.fa {
@@ -72,12 +91,10 @@ export default {
   clear: both;
   width: 100%;
 }
-.uploader #start.hidden {
-  display: none;
-}
-.uploader #start i.fa {
-  font-size: 50px;
-  margin-bottom: 1rem;
+
+.uploader #start i.fas {
+  color: #E8E8E8;
+  font-size: 40px;
   transition: all 0.2s ease-in-out;
 }
 .uploader #response {
@@ -93,75 +110,18 @@ export default {
 }
 .uploader #file-image {
   display: inline;
-  margin: 0 auto 0.5rem auto;
+  margin: 0 auto 0 auto;
   width: auto;
   height: auto;
   max-width: 180px;
 }
-.uploader #file-image.hidden {
-  display: none;
-}
-.uploader #notimage {
-  display: block;
-  float: left;
-  clear: both;
-  width: 100%;
-}
-.uploader #notimage.hidden {
-  display: none;
-}
-.uploader progress,
-.uploader .progress {
-  display: inline;
-  clear: both;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 180px;
-  height: 8px;
-  border: 0;
-  border-radius: 4px;
-  background-color: #eee;
-  overflow: hidden;
-}
-.uploader .progress[value]::-webkit-progress-bar {
-  border-radius: 4px;
-  background-color: #eee;
-}
-.uploader .progress[value]::-webkit-progress-value {
-  background: linear-gradient(to right, #393f90 0%, #454cad 50%);
-  border-radius: 4px;
-}
-.uploader .progress[value]::-moz-progress-bar {
-  background: linear-gradient(to right, #393f90 0%, #454cad 50%);
-  border-radius: 4px;
-}
+
 .uploader input[type="file"] {
   display: none;
 }
 .uploader div {
-  margin: 0 0 0.5rem 0;
+  margin: 0em;
   color: #5f6982;
 }
-.uploader .btn {
-  display: inline-block;
-  margin: 0.5rem 0.5rem 1rem 0.5rem;
-  clear: both;
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 14px;
-  text-decoration: none;
-  text-transform: initial;
-  border: none;
-  border-radius: 0.2rem;
-  outline: none;
-  padding: 0 1rem;
-  height: 36px;
-  line-height: 36px;
-  color: #fff;
-  transition: all 0.2s ease-in-out;
-  box-sizing: border-box;
-  background: #454cad;
-  border-color: #454cad;
-  cursor: pointer;
-}
+
 </style>

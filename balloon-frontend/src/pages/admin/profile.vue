@@ -1,44 +1,46 @@
 <template>
   <div>
     <navbar />
-    <b-container class="w-75">
+    <b-container class="w-75 p-0">
       <h5 class="mt-4 font-weight-light">Profile</h5>
       <hr class="mb-4" />
 
-      <div class="row">
+      <div class="row" id="headingrow">
         <div class="col-4 col-md-2 p-1">
-          <img :src="checkImage" class="w-100" />
+          <img :src="checkImage" class="w-100 rounded" />
         </div>
         <div class="col-8 col-md-10 p-1">
           <h6 class="mb-0">{{ user.fullname }}</h6>
           <small>User ID : {{ user.email }}</small>
           <div class="d-flex flex-row align-items-center">
-            <span v-if="checked == true" class="text-success">Active</span>
-            <span v-else class="text-danger">Inactive</span>
-
             <b-form-checkbox
-              class="ml-3"
               v-model="checked"
               name="check-button"
               switch
               @change="updateStatus"
             ></b-form-checkbox>
+
+            <span v-if="checked == true" class="text-success">Active</span>
+            <span v-else class="text-danger">Inactive</span>
           </div>
-          <p class="mt-2 mb-1"><b>Contact :</b></p>
+          <small><b>Contact :</b></small>
+          <br>
           <small>{{ user.contract }}</small>
         </div>
       </div>
-      <!--  -->
-      <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
-        <button
-          type="button"
-          class="btn w-100 btn-secondary"
-          @click="editModal"
-        >
-          Edit
-        </button>
-      </div>
     </b-container>
+
+    <div
+      class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
+      style="background: #F1F1F1;bottom: 0px;height: 20vh;"
+    >
+      <b-button class="w-75 mb-2" variant="secondary" @click="editModal"
+        >Edit</b-button
+      >
+      <b-button class="w-75" variant="danger" :to="{ name : 'logout' }"
+        >Logout</b-button
+      >
+    </div>
 
     <b-modal id="edit-modal" title="Edit Profile" centered hide-footer>
       <form @submit.prevent="updateUser()">
@@ -51,8 +53,8 @@
         </b-form-group>
 
         <hr />
+        
         <b-form-group label="Upload image">
-          <!-- Upload  -->
           <div id="file-upload-form" class="uploader">
             <input
               id="file-upload"
@@ -63,15 +65,14 @@
             />
 
             <label for="file-upload" id="file-drag">
-              <img :src="showSelectImage(editContact.images[0])" class="w-100" v-if="editContact.images != null">
+              <img
+                :src="showSelectImage(editContact.images[0])"
+                class="w-100"
+                v-if="editContact.images != null"
+              />
 
               <div id="start" v-else>
-                <i class="fa fa-download" aria-hidden="true"></i>
-                <div>Select a file</div>
-                <div id="notimage" class="hidden">Please select an image</div>
-                <span id="file-upload-btn" class="btn btn-primary"
-                  >Select a file</span
-                >
+                <i class="fas fa-image-polaroid"></i>
               </div>
             </label>
           </div>
@@ -124,10 +125,10 @@ export default {
         })
         .then(
           res => {
-            if (res.data.user[0].status == "inactive") {
+            if (res.data.user.status == "inactive") {
               this.checked = false;
             }
-            this.user = res.data.user[0];
+            this.user = res.data.user;
           },
           err => {
             console.log(err);

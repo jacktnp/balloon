@@ -14,11 +14,8 @@
         <b-nav-item :to="{ name: 'userindex' }">Home</b-nav-item>
         <b-nav-item :to="{ name: 'userbrowse' }">Browse</b-nav-item>
         <b-nav-item :to="{ name: 'userhistory'}">History</b-nav-item>
-        <b-nav-item :to="{ name: 'userprofile' }">Profile</b-nav-item>
         <b-nav-item :to="{ name: 'supporterActive' }">Supporter</b-nav-item>
-        <b-button class="btn-sm" variant="primary" :to="{ name: 'logout' }"
-          >{{ locals.email }} ({{ locals.role }})</b-button
-        >
+        <b-nav-item :to="{ name: 'userprofile' }">Profile</b-nav-item>
       </b-navbar-nav>
 
       <b-navbar-nav
@@ -30,10 +27,6 @@
         <b-nav-item :to="{ name: 'adminstatus'}">Status</b-nav-item>
         <b-nav-item :to="{ name: 'adminhistory' }">History</b-nav-item>
         <b-nav-item :to="{ name: 'adminprofile' }">Profile</b-nav-item>
-
-        <b-button class="btn-sm" variant="primary" :to="{ name: 'logout' }"
-          >{{ locals.email }} ({{ locals.role }})</b-button
-        >
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>

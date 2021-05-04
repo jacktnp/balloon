@@ -34,7 +34,8 @@ export default new Router({
     {
       path: '/auth',
       name: 'auth',
-      component: auth
+      component: auth,
+      meta: { title: "Test" }
     },
     {
       path: '/logout',

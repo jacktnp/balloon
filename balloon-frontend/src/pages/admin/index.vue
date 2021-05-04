@@ -1,23 +1,23 @@
 <template>
   <div>
     <navbar />
-    <b-container class="w-75" v-if="step == 1">
+    <b-container class="w-75 p-0" v-if="step == 1">
       <h5 class="mt-4 font-weight-light">Enter Equipment ID</h5>
       <hr class="mb-4" />
-      
-      <div class="row">
-        <div class="col-10 col-md-11 p-1">
+
+      <div class="row" id="headingrow">
+        <div class="col-10 p-1">
           <b-form-group>
             <b-form-input
               class="w-100"
               type="text"
-              placeholder="ENTER DEVICE CODE OR SCAN"
+              placeholder="Enter Device ID"
               v-model="item"
               v-on:keyup.enter="addItem"
             ></b-form-input>
           </b-form-group>
         </div>
-        <div class="col-2 col-md-1 p-1">
+        <div class="col-2 p-1">
           <b-button
             class="w-100"
             variant="danger"
@@ -45,7 +45,7 @@
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
         <b-button
           class="w-100"
-          variant="success"
+          variant="primary"
           @click="nextStep(1)"
           :disabled="items.length <= 0"
           >Next</b-button
@@ -53,17 +53,17 @@
       </div>
     </b-container>
 
-    <b-container class="w-75" v-else-if="step == 2">
+    <b-container class="w-75 p-0" v-else-if="step == 2">
       <h4 class="mt-4 font-weight-light">Enter User ID</h4>
       <hr class="mb-4" />
 
-      <div class="row">
+      <div class="row" id="headingrow">
         <div class="col-10 col-md-11 p-1">
           <b-form-group>
             <b-form-input
               class="w-100"
               type="text"
-              placeholder="ENTER USER ID with itxxxxxxxx"
+              placeholder="Enter User ID"
               v-model="userid"
               v-on:keyup.enter="addUser"
               :disabled="userShow"
@@ -82,21 +82,50 @@
         </div>
       </div>
 
-      <h3 class="mt-5 text-center" v-show="userShow">{{ userid }}</h3>
+      <div
+        class="card p-2 border-0"
+        style="background: transparent"
+        v-show="userShow"
+      >
+        <div class="row">
+          <div class="col-4">
+            <img
+              :src="userinfo.img[0].url"
+              class="w-100 rounded-pill"
+              v-if="userinfo.img[0].url != null"
+            />
+            <b-button
+              class="rounded-pill"
+              style="margin-top: -1em;"
+              size="sm"
+              variant="danger"
+              @click="delUser"
+              ><small><i class="far fa-sync"></i></small
+            ></b-button>
+          </div>
+          <div class="col-8 p-0">
+            <p class="mb-0">{{ userinfo.fullname }}</p>
+            <small>{{ userid }}</small>
+            <br />
+          </div>
+        </div>
+      </div>
+
+      <!-- <h3 class="mt-5 text-center" v-show="userShow">{{ userid }}</h3>
       <h6 class="mt-2 text-center" v-show="userShow">
         {{ userinfo.fullname }}
-      </h6>
+      </h6> -->
       <!-- <h6 class="mt-2 text-center" v-show="userShow">{{ userinfo.contract }}</h6> -->
-      <div class="text-center" v-show="userShow">
+      <!-- <div class="text-center" v-show="userShow">
         <b-button class="btn-sm" variant="danger" @click="delUser"
           ><small>CHANGE USER</small></b-button
         >
-      </div>
+      </div> -->
 
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
         <b-button
           class="w-100"
-          variant="success"
+          variant="primary"
           @click="nextStep(2)"
           :disabled="!userShow"
           >Next</b-button
@@ -104,7 +133,7 @@
       </div>
     </b-container>
 
-    <b-container class="w-75" v-else-if="step == 3">
+    <b-container class="w-75 p-0" v-else-if="step == 3">
       <h4 class="mt-4 font-weight-light">Confirm</h4>
       <hr class="mb-4" />
 
@@ -134,7 +163,9 @@
       ></b-form-datepicker>
 
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
-        <b-button class="w-100" variant="success" @click="borrow">Confirm</b-button>
+        <b-button class="w-100" variant="success" @click="borrow"
+          >Confirm</b-button
+        >
       </div>
     </b-container>
 
@@ -153,7 +184,6 @@
 import navbar from "@/components/navbar";
 import axios from "@/store/api";
 
-
 export default {
   components: { navbar },
   data() {
@@ -164,7 +194,8 @@ export default {
       userid: "",
       userinfo: {
         fullname: "",
-        email: ""
+        email: "",
+        img: [{ url: null }]
       },
       userShow: false,
       deadline: null,
@@ -189,10 +220,9 @@ export default {
           })
           .then(
             res => {
-              if(res.data.device.length == 0){
-                alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง")
-              }
-              else{
+              if (res.data.device.length == 0) {
+                alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง");
+              } else {
                 var arr = {};
                 arr["_id"] = res.data.device[0]._id;
                 arr["code_device"] = res.data.device[0].code_device;
@@ -203,7 +233,7 @@ export default {
             },
             err => {
               console.log(err);
-              alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง")
+              alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง");
             }
           );
         this.item = "";
@@ -247,11 +277,10 @@ export default {
           })
           .then(
             res => {
-              if(res.data.user.length == 0){
+              if (res.data.user.length == 0) {
                 this.delUser();
                 alert("ชื่อผู้ใช้ไม่ถูกต้อง");
-              }
-              else{
+              } else {
                 this.userinfo = res.data.user[0];
               }
             },
@@ -287,6 +316,9 @@ export default {
     },
     delUser() {
       this.userid = "";
+      this.userinfo.fullname = "";
+      this.userinfo.email = "";
+      this.userinfo.img = [];
       this.userShow = false;
     },
     nextStep(step) {
@@ -297,11 +329,11 @@ export default {
       var today = new Date();
       var deadline = new Date(this.deadline);
 
-      console.log('today : ', today)
-      console.log('dl : ', deadline)
+      console.log("today : ", today);
+      console.log("dl : ", deadline);
 
       this.deadline_day = Math.round(Math.abs((deadline - today) / oneDay));
-      console.log('between: ',this.deadline_day)
+      console.log("between: ", this.deadline_day);
     },
     async borrow() {
       await this.calDeadlineday();

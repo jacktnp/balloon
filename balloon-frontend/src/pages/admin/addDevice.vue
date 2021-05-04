@@ -1,7 +1,7 @@
 <template>
   <div>
     <navbar />
-    <b-container class="w-75">
+    <b-container class="w-75 p-0">
       <h5 class="mt-4 font-weight-light">
         <router-link :to="{ name: 'adminmanagement' }"
           ><i class="fal fa-chevron-left mr-3"></i
@@ -16,17 +16,20 @@
         ><b>Description : </b> {{ equipment.detail_type }}</small
       >
       <hr />
-      <small><b>Status : </b> {{ statusAvaliable }}</small>
+      <small><b>Status : </b>
+        <span class="text-success text-capitalize" v-if="equipment.have_device > 0">Avaliable</span>
+        <span class="text-danger text-capitalize" v-else>Unavaliable</span>
+      </small>
       <br />
       <small><b>Category : </b> {{ equipment.category }}</small>
 
-      <div class="row mt-4">
+      <div class="row mt-4" id="headingrow">
         <div class="col-9 col-md-10 p-1">
           <b-form-group>
             <b-form-input
               class="w-100"
               type="text"
-              placeholder="ระบุเลข ทส"
+              placeholder="Enter Device ID"
               v-model="item"
               v-on:keyup.enter="addItem"
             ></b-form-input>
@@ -71,14 +74,14 @@
       style="background: #F1F1F1;bottom: 0px;height: 15vh;"
     >
       <b-button class="w-75 mb-2" variant="success" @click="downloadAll"
-        >Download</b-button
+        >Download <i class="far fa-qrcode"></i></b-button
       >
       <b-button class="w-75" variant="secondary" v-b-modal.edit-type-modal
         >Edit</b-button
       >
     </div>
 
-    <b-modal id="edit-type-modal" no-close-on-backdrop centered hide-footer>
+    <b-modal id="edit-type-modal" title="Edit Equipment" no-close-on-backdrop centered hide-footer>
       <form @submit="editType">
         <b-form-group label="Equipment Title :">
           <b-form-input
@@ -106,7 +109,7 @@
           </div>
           <div class="col px-1">
             <b-button type="submit" class="w-100 mb-2" variant="success"
-              >UPDATE</b-button
+              >Update</b-button
             >
           </div>
         </div>
@@ -189,7 +192,7 @@ export default {
         })
       );
       zip.generateAsync({ type: "blob" }).then(content => {
-        saveAs(content, `${this.equipment.name_type}_zipfiles`);
+        saveAs(content, `${this.equipment.name_type}_zipfiles.zip`);
         this.$isLoading(false);
       });
     },
@@ -244,8 +247,7 @@ export default {
           )
           .then(
             res => {
-              this.device = [];
-              this.getDevice(this.equipment.name_type);
+              this.getEquipment();
             },
             err => {
               console.log(err);
