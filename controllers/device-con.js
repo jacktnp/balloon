@@ -11,13 +11,13 @@ const createDevice = async (req, res, next) => {
         name_type
     } = req.body
     console.log(device)
-    const getType = await Tyep.findOne({ name_type: name_type })
+    const getType = await Tyep.findOneAndUpdate({ name_type: name_type }, { $inc: { have_device: 1 } })
     console.log(getType)
     device.img = getType.img
 
     const newDevice = await Device.createDevice(device)
     console.log(newDevice)
-    res.send({ "device": newDevice})
+    res.send({ "device": newDevice })
 };
 module.exports.createDevice = createDevice;
 
@@ -47,6 +47,7 @@ module.exports.deleteDevice = deleteDevice;
 
 const getAllDevice = async (req, res, next) => {
     const getDevice = await Device.find()
+
     res.send({ "device": getDevice })
 };
 module.exports.getAllDevice = getAllDevice;

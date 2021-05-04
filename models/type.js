@@ -7,7 +7,11 @@ var TypeSchema = mongoose.Schema({
         type: String,
         default: 'active'
     },
-    category : {
+    have_device: {
+        type: Number,
+        default: 0
+    },
+    category: {
         type: String,
     },
 
