@@ -1,4 +1,6 @@
 const Borrow = require("../models/borrow");
+const Device = require("../models/device");
+
 const variable_status = require("../config/variable_status");
 const { get } = require("../routes");
 const nodemailer = require("nodemailer");
@@ -18,6 +20,7 @@ const createBorrow = async (req, res, next) => {
         device,
     } = req.body
     const getBorrow = await Borrow.find({ status: "borrow", email: email })
+
     console.log(getBorrow.length)
     if (getBorrow.length > 0) {
         res.status(403).send({ "borrow": "cant borrow please return" })
@@ -26,6 +29,15 @@ const createBorrow = async (req, res, next) => {
         console.log(borrow)
         borrow.date_return = addDays(date_return)
         borrow.date = date = new Date().toString()
+        getDeviceId = device.map(data => {
+            return data._id
+        })
+        console.log(getDeviceId)
+        updateDevice = await Device.updateMany({
+            _id: { $in: getDeviceId }
+        }, {
+            status_device: "borrow"
+        })
         const newBorrow = await Borrow.createBorrow(borrow)
         res.send({ "borrow": borrow })
     }
@@ -142,6 +154,11 @@ module.exports.updateOneDeviceInBorrow = async (req, res, next) => {
     if (check === 0) {
         newDevice.status = "return"
     }
+    await Device.updateOne({
+        _id: device_id
+    }, {
+        status_device: "active"
+    })
     const updateDeviceInBorrow = await Borrow.updateBorrow(newDevice, borrow_id)
     res.send({ getBorrow: updateDeviceInBorrow })
 
@@ -161,6 +178,16 @@ module.exports.updateAllDeviceInBorrow = async (req, res, next) => {
     const newDevice = {
         device: updateDevice,
     }
+    const getDeviceId = getBorrow.device.map(data => {
+        return data._id
+    })
+    console.log(getDeviceId)
+    await Device.updateMany({
+        _id: { $in: getDeviceId }
+    }, {
+        status_device: "active"
+    })
+
 
     newDevice.status = "return"
     const updateDeviceInBorrow = await Borrow.updateBorrow(newDevice, borrow_id)
