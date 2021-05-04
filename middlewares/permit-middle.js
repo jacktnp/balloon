@@ -7,7 +7,8 @@ module.exports.permit = (permittedRoles)=> {
       let user
       let hello
 try{
-       hello = req.headers.authorization
+       hello = req.headers.authorization.replace('Bearer ', '')
+       console.log(req.headers.authorization.replace('Bearer ', ''))
        user = jwt.verify(hello, "MY_SECRET_KEY");
     }catch(e){
       console.log(e)
@@ -15,13 +16,14 @@ try{
       console.log(user)
       try{
       if (user.role && permittedRoles.includes(user.role)) {
+        req.user = user
         next(); // role is allowed, so continue on the next middleware
       } else {
         
-        res.status(403).json({message: "Forbidden"}); // user is forbidden
+        res.status(200).json({message: "Forbidden"}); // user is forbidden
       }
     }catch(e){
-      res.status(403).json({message: "Forbiddezn"})
+      res.status(200).json({message: "Forbiddezn"})
     }
     }
   }

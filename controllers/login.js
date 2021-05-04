@@ -52,10 +52,10 @@ module.exports.loginLadp = async (req, res, next) => {
             uid: result.uSNCreated,
             img: img
         }
-        const token = 'Bearer ' + jwt.sign(
-            { email: req.body.email, password: encrypepassword },
-            'itkmitl',
-            { expiresIn: "6h" })
+        const token = jwt.sign(
+            { email: req.body.email, role: ldaprole },
+            'MY_SECRET_KEY',
+            { expiresIn: "1h" })
         console.log('Authenticated successfully');
 
         const userLogin = await User.find({ email: email })
