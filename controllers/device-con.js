@@ -40,6 +40,9 @@ module.exports.updateDevice = updateDevice;
 
 const deleteDevice = async (req, res, next) => {
     const deleteDevice = await Device.deleteDevice(req.params.id)
+
+    const getType = await Tyep.findOneAndUpdate({ name_type: deleteDevice.name_type }, { $inc: { have_device: -1 } })
+
     res.send({ "device": deleteDevice })
 };
 module.exports.deleteDevice = deleteDevice;
