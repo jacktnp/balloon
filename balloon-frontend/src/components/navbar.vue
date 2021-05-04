@@ -7,24 +7,18 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <!-- Student -->
-      <b-navbar-nav
-        class="ml-auto"
-        v-if="locals.role == 'student'"
-      >
+      <b-navbar-nav class="ml-auto" v-if="locals.role == 'student'">
         <b-nav-item :to="{ name: 'userindex' }">Home</b-nav-item>
         <b-nav-item :to="{ name: 'userbrowse' }">Browse</b-nav-item>
-        <b-nav-item :to="{ name: 'userhistory'}">History</b-nav-item>
+        <b-nav-item :to="{ name: 'userstatus' }">Status</b-nav-item>
         <b-nav-item :to="{ name: 'supporterActive' }">Supporter</b-nav-item>
         <b-nav-item :to="{ name: 'userprofile' }">Profile</b-nav-item>
       </b-navbar-nav>
 
-      <b-navbar-nav
-        class="ml-auto"
-        v-else-if="locals.role == 'support'"
-      >
+      <b-navbar-nav class="ml-auto" v-else-if="locals.role == 'support'">
         <b-nav-item :to="{ name: 'adminindex' }">Home</b-nav-item>
         <b-nav-item :to="{ name: 'adminmanagement' }">Management</b-nav-item>
-        <b-nav-item :to="{ name: 'adminstatus'}">Status</b-nav-item>
+        <b-nav-item :to="{ name: 'adminstatus' }">Status</b-nav-item>
         <b-nav-item :to="{ name: 'adminhistory' }">History</b-nav-item>
         <b-nav-item :to="{ name: 'adminprofile' }">Profile</b-nav-item>
       </b-navbar-nav>
@@ -33,6 +27,8 @@
 </template>
 
 <script>
+import axios from "@/store/api";
+
 export default {
   data() {
     return {
@@ -40,10 +36,10 @@ export default {
     };
   },
   methods: {
-    checkToken(){
+    checkToken() {
       setTimeout(() => {
         this.locals = this.$store.getters.info.user;
-      }, 300)
+      }, 500);
     }
   },
   mounted() {

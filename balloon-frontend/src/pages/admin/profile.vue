@@ -7,10 +7,10 @@
 
       <div class="row" id="headingrow">
         <div class="col-4 col-md-2 p-1">
-          <img :src="checkImage" class="w-100 rounded" />
+          <img :src="checkImage" class="w-100 rounded-pill" />
         </div>
         <div class="col-8 col-md-10 p-1">
-          <h6 class="mb-0">{{ user.fullname }}</h6>
+          <p class="mb-0">{{ user.fullname }}</p>
           <small>User ID : {{ user.email }}</small>
           <div class="d-flex flex-row align-items-center">
             <b-form-checkbox
@@ -117,6 +117,7 @@ export default {
       return URL.createObjectURL(image);
     },
     getUser() {
+      this.$isLoading(true);
       axios
         .get("user/" + this.$store.getters.info.user._id, {
           headers: {
@@ -125,12 +126,14 @@ export default {
         })
         .then(
           res => {
+            this.$isLoading(false);
             if (res.data.user.status == "inactive") {
               this.checked = false;
             }
             this.user = res.data.user;
           },
           err => {
+            this.$router.push({ name: 'logout'});
             console.log(err);
           }
         );
@@ -198,7 +201,7 @@ export default {
     checkImage() {
       // console.log(this.user.img.length == 0 || !this.user.img)
       if (!this.user.img || this.user.img.length == 0) {
-        return "https://thaigifts.or.th/wp-content/uploads/2017/03/no-image.jpg";
+        return "../../assets/none_img.png";
       } else {
         return this.user.img[0].url;
       }
@@ -209,3 +212,10 @@ export default {
   }
 };
 </script>
+
+<style>
+.custom-control-input:checked ~ .custom-control-label::before {
+  border-color: #28A745 !important;
+  background-color: #28A745 !important;
+}
+</style>

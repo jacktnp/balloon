@@ -38,7 +38,7 @@
         >
           <div class="row" id="headingrow">
             <div class="col-4">
-              <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" />
+              <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" v-if="!data.user" />
             </div>
             <div class="col-8 p-0">
               <p class="mb-0">{{ data.user[0].fullname }}</p>
@@ -65,7 +65,7 @@
         >
           <div class="row" id="headingrow">
             <div class="col-4">
-              <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" />
+              <img :src="data.user[0].img[0].url" class="w-100 rounded-pill" v-if="!data.user" />
             </div>
             <div class="col-8 p-0">
               <p class="mb-0">{{ data.user[0].fullname }}</p>
@@ -82,7 +82,7 @@
       </div>
     </b-container>
 
-    <b-modal id="select-data" v-if="selectData != null" :title="'Due : '+convertDate(selectData.date_return)" hide-footer centered>
+    <b-modal id="select-data" v-if="selectData != null" :title="'Due date : '+convertDate(selectData.date_return)" hide-footer centered>
       <div>
         <div class="row">
           <div class="col-4">
@@ -173,6 +173,7 @@ export default {
             // console.log(a)
           },
           err => {
+            this.$router.push({ name: 'logout'});
             console.log(err);
           }
         );
@@ -251,7 +252,7 @@ export default {
 
 .active {
   color: #fff;
-  background-color: #000000B3;
+  background-color: #72A3BC;
 }
 
 .card:focus {

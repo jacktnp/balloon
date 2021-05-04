@@ -4,7 +4,6 @@
     <b-container class="w-75 p-0" v-if="step == 1">
       <h5 class="mt-4 font-weight-light">Enter Equipment ID</h5>
       <hr class="mb-4" />
-
       <div class="row" id="headingrow">
         <div class="col-10 p-1">
           <b-form-group>
@@ -92,35 +91,23 @@
             <img
               :src="userinfo.img[0].url"
               class="w-100 rounded-pill"
-              v-if="userinfo.img[0].url != null"
+              v-if="userinfo.img.length > 0"
             />
-            <b-button
-              class="rounded-pill"
-              style="margin-top: -1em;"
-              size="sm"
-              variant="danger"
-              @click="delUser"
-              ><small><i class="far fa-sync"></i></small
-            ></b-button>
           </div>
           <div class="col-8 p-0">
             <p class="mb-0">{{ userinfo.fullname }}</p>
             <small>{{ userid }}</small>
+            <br>
+            <b-button
+              size="sm"
+              variant="danger"
+              @click="delUser"
+              ><small>Change</small
+            ></b-button>
             <br />
           </div>
         </div>
       </div>
-
-      <!-- <h3 class="mt-5 text-center" v-show="userShow">{{ userid }}</h3>
-      <h6 class="mt-2 text-center" v-show="userShow">
-        {{ userinfo.fullname }}
-      </h6> -->
-      <!-- <h6 class="mt-2 text-center" v-show="userShow">{{ userinfo.contract }}</h6> -->
-      <!-- <div class="text-center" v-show="userShow">
-        <b-button class="btn-sm" variant="danger" @click="delUser"
-          ><small>CHANGE USER</small></b-button
-        >
-      </div> -->
 
       <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
         <b-button
@@ -140,11 +127,11 @@
       <div style="overflow-y: auto;overflow-x: hidden;max-height: 40vh;">
         <div class="row" v-for="(item, index) in items" :key="index">
           <div class="col-4 col-md-2 p-2">
-            <img :src="item.img[0].url" class="w-100" />
+            <img :src="item.img[0].url" class="w-100 rounded" />
           </div>
           <div class="col-8 col-md-10 p-2">
             <h6 class="mb-0">{{ item.name_type }}</h6>
-            <small>Equipment ID : {{ item.code_device }}</small>
+            <small>ID : {{ item.code_device }}</small>
           </div>
         </div>
       </div>
@@ -155,7 +142,7 @@
       <p>
         <small><b>User ID </b>: {{ userinfo.email }}</small>
       </p>
-      <label for="datepicker-sm">ระบุวันคืน:</label>
+      <label for="datepicker-sm">Due date:</label>
       <b-form-datepicker
         :min="new Date()"
         size="sm"
@@ -176,6 +163,16 @@
         @decode="addUserbyQR"
         v-else-if="step == 2"
       ></qrcode-stream>
+    </b-modal>
+
+    <b-modal id="modal-status" no-close-on-backdrop centered hide-header hide-footer>
+      <div class="d-flex flex-column align-items-center my-5">
+        <img v-if="status == 'success'" src="../../assets/alert/success.png" class="w-25">
+        <img v-else src="../../assets/alert/ban.png" class="w-25">
+        <small class="mt-3 mb-4" v-if="status == 'success'">Transaction complete</small>
+        <small class="mt-3 mb-4" v-else>Transaction failed</small>
+        <b-button class="mt-3 w-25" variant="secondary" @click="closeStatusModal">OK</b-button>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -199,7 +196,8 @@ export default {
       },
       userShow: false,
       deadline: null,
-      deadline_day: 0
+      deadline_day: 0,
+      status: null
     };
   },
   methods: {
@@ -281,7 +279,7 @@ export default {
                 this.delUser();
                 alert("ชื่อผู้ใช้ไม่ถูกต้อง");
               } else {
-                this.userinfo = res.data.user[0];
+                this.userinfo = res.data.user;
               }
             },
             err => {
@@ -304,7 +302,7 @@ export default {
         })
         .then(
           res => {
-            this.userinfo = res.data.user[0];
+            this.userinfo = res.data.user;
           },
           err => {
             this.delUser();
@@ -345,14 +343,23 @@ export default {
         })
         .then(
           res => {
-            alert("ทำรายการสำเร็จ");
-            this.$router.push({ name: "index" });
+            this.openStatusModal('success')
+            // this.$router.push({ name: "index" });
           },
           err => {
-            alert(`${userinfo.email} ยังไม่ได้คืนของล่าสุด`);
+            this.openStatusModal('fail')
+            // alert(`${userinfo.email} ยังไม่ได้คืนของล่าสุด`);
             console.log(err);
           }
         );
+    },
+    openStatusModal(status) {
+      this.$bvModal.show('modal-status');
+      this.status = status;
+    },
+    closeStatusModal() {
+      this.$bvModal.hide('modal-status')
+      this.$router.push({ name: "index" });
     }
   }
 };

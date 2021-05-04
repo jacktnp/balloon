@@ -9,7 +9,7 @@ import userindex from '@/pages/user/index'
 import userbrowse from '@/pages/user/browse'
 import supporterActive from '@/pages/user/supporter-active'
 import userprofile from '@/pages/user/profile'
-import userhistory from '@/pages/user/history'
+import userstatus from '@/pages/user/status'
 // Admin
 import adminindex from '@/pages/admin/index'
 import adminmanagement from '@/pages/admin/management'
@@ -64,9 +64,9 @@ export default new Router({
       component: userprofile
     },
     {
-      path: '/user/history',
-      name: 'userhistory',
-      component: userhistory
+      path: '/user/status',
+      name: 'userstatus',
+      component: userstatus
     },
     // Admin
     {

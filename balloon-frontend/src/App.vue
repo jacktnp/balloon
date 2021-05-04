@@ -14,6 +14,10 @@ export default {
 </script>
 
 <style>
+html {
+  background: #F1F1F1;
+}
+
 #app {
   min-height: 100vh;
   background: #F1F1F1;
@@ -34,6 +38,11 @@ export default {
   border-color: transparent !important;
 }
 
+.bg-danger, .btn-danger {
+  background: #ff6666 !important;
+  border-color: transparent !important;
+}
+
 .btn-secondary {
   background: #C3C3C3 !important;
   border-color: transparent !important;
@@ -50,6 +59,10 @@ export default {
 
 #modal-history .modal-header {
   border-bottom: 0px !important;
+}
+
+#modal-history .modal-body {
+  padding-top: 0px !important;
 }
 
 /* Upload Form */

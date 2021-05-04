@@ -7,10 +7,10 @@
       <p class="text-center">
         <img src="../assets/logo2.png" class="w-75 mb-3" />
       </p>
+      
       <b-form-group>
         <b-form-input
           v-model="username"
-          type="text"
           placeholder="User name"
           required
         ></b-form-input>
@@ -35,8 +35,8 @@ import axios from "@/store/api";
 export default {
   data() {
     return {
-      username: "it60070046",
-      password: "OXOlhm86"
+      username: "",
+      password: "P@ssw0rd123#$%"
     };
   },
   methods: {

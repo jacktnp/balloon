@@ -3,7 +3,7 @@
     <navbar />
     <b-container class="w-75 p-0">
       <div class="row" id="headingrow">
-        <div class="col-5">
+        <div class="col-5 p-0">
           <h5 class="mt-4 font-weight-light">Browse</h5>
         </div>
         <div class="col-7 d-flex justify-content-end mt-4">
@@ -96,6 +96,7 @@ export default {
             this.equipments = res.data.type;
           },
           err => {
+            this.$router.push({ name: 'logout'});
             console.log(err);
           }
         );
@@ -123,7 +124,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 input[type="text"] {
   display: inline-block;
   border: none;

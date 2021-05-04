@@ -10,7 +10,7 @@
           <img :src="checkImage(user.img)" class="w-100 rounded-pill" />
         </div>
         <div class="col-8 col-md-10">
-          <h6 class="mb-0">{{ user.fullname }}</h6>
+          <p class="mb-0">{{ user.fullname }}</p>
           <small>User ID : {{ user.email }}</small>
           <br />
           <small><b>Contact :</b></small>
@@ -98,10 +98,16 @@ export default {
     selectImages(event) {
       this.editContact.image = event.target.files;
     },
+    showSelectImage(image) {
+      // for preview only
+      return URL.createObjectURL(image);
+    },
     openModal() {
       this.$bvModal.show("modal-user");
     },
     getUser() {
+      this.$isLoading(true);
+
       axios
         .get("user/" + this.$store.getters.info.user._id, {
           headers: {
@@ -110,9 +116,12 @@ export default {
         })
         .then(
           res => {
+            this.$isLoading(false);
+
             this.user = res.data.user;
           },
           err => {
+            this.$router.push({ name: 'logout'});
             console.log(err);
           }
         );
@@ -147,7 +156,7 @@ export default {
     },
     checkImage(url) {
       if (url.length <= 0) {
-        return "https://thaigifts.or.th/wp-content/uploads/2017/03/no-image.jpg";
+        return "../../assets/alert/none_img.png"
       } else {
         return url[0].url;
       }

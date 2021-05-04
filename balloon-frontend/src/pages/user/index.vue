@@ -40,6 +40,7 @@ export default {
             this.borrow_status = res.data.user.have_borrow;
           },
           err => {
+            this.$router.push({ name: 'logout'});
             console.log(err);
           }
         );

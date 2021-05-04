@@ -11,6 +11,8 @@
         </div>
         <div class="col-8 col-md-10">
           <h6 class="mt-2 mb-0">{{ support.fullname || support.email }}</h6>
+          <small>{{ support.contract }}</small>
+          <br>
           <small class="text-danger" v-if="support.status == 'inactive'">Inactive</small>
           <small class="text-success" v-if="support.status == 'active'">Active</small>
         </div>
@@ -44,6 +46,7 @@ export default {
             this.support = res.data.user;
           },
           err => {
+            this.$router.push({ name: 'logout'});
             console.log(err);
           }
         );

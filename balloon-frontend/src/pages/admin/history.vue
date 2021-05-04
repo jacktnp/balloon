@@ -30,7 +30,7 @@
       </div>
     </b-container>
 
-    <b-modal id="modal-history" centered hide-footer v-if="index != null">
+    <b-modal id="modal-history" class="pt-0" centered hide-footer v-if="index != null">
       <b-row>
         <b-col cols="4">
           <img :src="history[index].user[0].img[0].url" class="w-100 rounded-pill" />
@@ -83,6 +83,7 @@ export default {
             this.history = res.data.borrow;
           },
           err => {
+            this.$router.push({ name: 'logout'});
             console.log(err);
           }
         );

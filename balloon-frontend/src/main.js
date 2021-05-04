@@ -33,8 +33,8 @@ Vue.use(Vuelidate)
 
 
 Vue.use(loading, {
-  bg: '#000000e0',
-  icon: 'fas fa-compact-disc',
+  bg: '#00000082',
+  icon: 'fas fa-circle-notch',
   size: 3,
   icon_color: 'white',
 })

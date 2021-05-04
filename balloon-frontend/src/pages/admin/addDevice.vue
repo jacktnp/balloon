@@ -16,8 +16,13 @@
         ><b>Description : </b> {{ equipment.detail_type }}</small
       >
       <hr />
-      <small><b>Status : </b>
-        <span class="text-success text-capitalize" v-if="equipment.have_device > 0">Avaliable</span>
+      <small
+        ><b>Status : </b>
+        <span
+          class="text-success text-capitalize"
+          v-if="equipment.have_device > 0"
+          >Avaliable</span
+        >
         <span class="text-danger text-capitalize" v-else>Unavaliable</span>
       </small>
       <br />
@@ -59,7 +64,7 @@
               <i class="fas fa-download"></i>
             </small>
 
-            <small class="pl-2" @click.prevent="delItem(item._id)">
+            <small class="pl-2" @click.prevent="openStatusModal2(item._id)">
               <i class="fas fa-trash-alt"></i>
             </small>
           </div>
@@ -74,14 +79,20 @@
       style="background: #F1F1F1;bottom: 0px;height: 15vh;"
     >
       <b-button class="w-75 mb-2" variant="success" @click="downloadAll"
-        >Download <i class="far fa-qrcode"></i></b-button
-      >
+        >Download <i class="far fa-qrcode"></i
+      ></b-button>
       <b-button class="w-75" variant="secondary" v-b-modal.edit-type-modal
         >Edit</b-button
       >
     </div>
 
-    <b-modal id="edit-type-modal" title="Edit Equipment" no-close-on-backdrop centered hide-footer>
+    <b-modal
+      id="edit-type-modal"
+      title="Edit Equipment"
+      no-close-on-backdrop
+      centered
+      hide-footer
+    >
       <form @submit="editType">
         <b-form-group label="Equipment Title :">
           <b-form-input
@@ -115,6 +126,62 @@
         </div>
       </form>
     </b-modal>
+
+    <!-- ConfirmMsg Device -->
+    <b-modal
+      id="modal-status2"
+      no-close-on-backdrop
+      centered
+      hide-header
+      hide-footer
+    >
+      <div class="d-flex flex-column align-items-center my-5">
+        <img src="../../assets/alert/trash.png" class="w-25" />
+        <small class="mt-3 mb-4">Comfirm to delete ?</small>
+        <div class="d-flex justify-content-center w-100">
+          <b-button
+            class="mt-3 w-25 mr-2"
+            variant="secondary"
+            @click="closeStatusModal2('delete')"
+            >OK</b-button
+          >
+          <b-button
+            class="mt-3 w-25"
+            variant="success"
+            @click="closeStatusModal2('...')"
+            >Cancel</b-button
+          >
+        </div>
+      </div>
+    </b-modal>
+
+    <!-- ConfirmMsg Equip -->
+    <b-modal
+      id="modal-status"
+      no-close-on-backdrop
+      centered
+      hide-header
+      hide-footer
+    >
+      <div class="d-flex flex-column align-items-center my-5">
+        <img src="../../assets/alert/trash.png" class="w-25" />
+        <small class="mt-3 mb-4">Comfirm to delete ?</small>
+        <div class="d-flex justify-content-center w-100">
+          <b-button
+            class="mt-3 w-25 mr-2"
+            variant="secondary"
+            @click="closeStatusModal('delete')"
+            >OK</b-button
+          >
+          <b-button
+            class="mt-3 w-25"
+            variant="success"
+            @click="closeStatusModal('...')"
+            >Cancel</b-button
+          >
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -143,7 +210,8 @@ export default {
         { value: "Network", text: "Network" },
         { value: "Accessories", text: "Accessories" },
         { value: "Other", text: "Other" }
-      ]
+      ],
+      device_id: null
     };
   },
   methods: {
@@ -210,6 +278,7 @@ export default {
             this.getDevice(res.data.type[0].name_type);
           },
           err => {
+            this.$router.push({ name: 'logout'});
             console.log(err);
           }
         );
@@ -232,6 +301,7 @@ export default {
     },
     addItem() {
       if (this.item != "") {
+        this.$isLoading(true);
         axios
           .post(
             "device",
@@ -248,9 +318,11 @@ export default {
           .then(
             res => {
               this.getEquipment();
+              this.$isLoading(false);
             },
             err => {
               console.log(err);
+              this.$isLoading(false);
             }
           );
         this.item = "";
@@ -278,12 +350,13 @@ export default {
     },
     checkImage(url) {
       if (!url) {
-        return "https://thaigifts.or.th/wp-content/uploads/2017/03/no-image.jpg";
+        return "https://i.imgur.com/PSxdYww.png";
       } else {
         return url[0].url;
       }
     },
     editType() {
+      this.$isLoading(true);
       axios
         .put(
           "type/id/" + this.$route.params.id,
@@ -299,48 +372,86 @@ export default {
         )
         .then(
           res => {
+            this.$isLoading(false);
             location.reload();
           },
           err => {
+            this.$isLoading(false);
             console.log(err);
           }
         );
     },
     deleteType() {
-      this.$bvModal
-        .msgBoxConfirm(`ยืนยันที่จะลบ ${this.equipment.name_type} ใช่ไหม ?`, {
-          size: "sm",
-          buttonSize: "sm",
-          cancelVariant: "secondary",
-          okVariant: "success",
-          okTitle: "CANCEL",
-          cancelTitle: "CONFIRM",
-          footerClass: "p-2",
-          hideHeaderClose: false,
-          centered: true
-        })
-        .then(value => {
-          if (value == false) {
-            axios
-              .delete("type/id/" + this.$route.params.id, {
-                headers: {
-                  Authorization: "Bearer " + this.$store.getters.info.token
-                }
-              })
-              .then(
-                res => {
-                  this.$router.push({ name: "adminmanagement" });
-                },
-                err => {
-                  console.log(err);
-                }
-              );
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      console.log("delete");
+      this.openStatusModal();
+      // this.$bvModal
+      //   .msgBoxConfirm(`<img src="../../assets/alert/trash.png"> ยืนยันที่จะลบ ${this.equipment.name_type} ใช่ไหม ?`, {
+      //     size: "sm",
+      //     buttonSize: "sm",
+      //     cancelVariant: "secondary",
+      //     okVariant: "success",
+      //     okTitle: "CANCEL",
+      //     cancelTitle: "CONFIRM",
+      //     footerClass: "p-2",
+      //     hideHeaderClose: false,
+      //     centered: true
+      //   })
+      //   .then(value => {
+      //     if (value == false) {
+      // axios
+      //   .delete("type/id/" + this.$route.params.id, {
+      //     headers: {
+      //       Authorization: "Bearer " + this.$store.getters.info.token
+      //     }
+      //   })
+      //   .then(
+      //     res => {
+      //       this.$router.push({ name: "adminmanagement" });
+      //     },
+      //     err => {
+      //       console.log(err);
+      //     }
+      //   );
+      //     }
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
+      // console.log("delete");
+    },
+    openStatusModal() {
+      this.$bvModal.show("modal-status");
+    },
+    closeStatusModal(status) {
+      if (status == "delete") {
+        axios
+          .delete("type/id/" + this.$route.params.id, {
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.info.token
+            }
+          })
+          .then(
+            res => {
+              this.$router.push({ name: "adminmanagement" });
+            },
+            err => {
+              console.log(err);
+            }
+          );
+        this.$router.push({ name: "adminmanagement" });
+      } else {
+        this.$bvModal.hide("modal-status");
+      }
+    },
+    openStatusModal2(id) {
+      this.$bvModal.show("modal-status2");
+      this.device_id = id
+    },
+    closeStatusModal2(status) {
+      if (status == "delete") {
+        this.delItem(this.device_id)
+      } else {
+        this.$bvModal.hide("modal-status2");
+      }
     }
   },
   computed: {

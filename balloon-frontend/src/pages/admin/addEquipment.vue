@@ -70,10 +70,13 @@
       >
     </div>
 
-    <b-modal id="modal-status" class="p-3" no-close-on-backdrop centered hide-header hide-footer>
-      <img src="../../assets/logo1.png" class="w-100">
-      <div class="d-flex justify-content-center">
-        <b-button variant="success" @click="closeStatusModal">OK</b-button>
+    <b-modal id="modal-status" no-close-on-backdrop centered hide-header hide-footer>
+      <div class="d-flex flex-column align-items-center my-5">
+        <img v-if="status == 'success'" src="../../assets/alert/success.png" class="w-25">
+        <img v-else src="../../assets/alert/ban.png" class="w-25">
+        <small class="mt-3 mb-4" v-if="status == 'success'">Equipment Added</small>
+        <small class="mt-3 mb-4" v-else>Failed</small>
+        <b-button class="mt-3 w-25" variant="secondary" @click="closeStatusModal">OK</b-button>
       </div>
     </b-modal>
   </div>
@@ -105,7 +108,8 @@ export default {
         { value: "Network", text: "Network" },
         { value: "Accessories", text: "Accessories" },
         { value: "Other", text: "Other" }
-      ]
+      ],
+      status: null
     };
   },
   validations: {
@@ -153,10 +157,11 @@ export default {
             res => {
               this.$isLoading(false);
 
-              alert("เพิ่มข้อมูลสำเร็จ ระบบจะรีไดเร็คไปหน้ารวม Equipment");
-              this.$bvModal.show('modal-status')
+              // alert("เพิ่มข้อมูลสำเร็จ ระบบจะรีไดเร็คไปหน้ารวม Equipment");
+              this.openStatusModal('success')
             },
             err => {
+              this.openStatusModal('error')
               console.log(err);
             }
           );
@@ -164,13 +169,14 @@ export default {
         alert("กรอกข้อมูลไม่ครบ")
       }
     },
+    openStatusModal(status) {
+      this.$bvModal.show('modal-status');
+      this.status = status;
+    },
     closeStatusModal() {
       this.$bvModal.hide('modal-status')
       this.$router.push({ name: "adminmanagement" });
     }
-  },
-  mounted() {
-    
   }
 };
 </script>
