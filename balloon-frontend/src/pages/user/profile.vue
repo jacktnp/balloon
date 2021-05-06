@@ -9,8 +9,15 @@
         <div class="col-4 col-md-3 p-1">
           <img :src="checkImage(user.img)" class="w-100 rounded-pill" />
         </div>
-        <div class="col-8 col-md-9 p-1">
+        <div class="col-8 col-md-9 p-1 d-lg-none">
           <p class="mb-0">{{ user.fullname }}</p>
+          <small>User ID : {{ user.email }}</small>
+          <br />
+          <small><b>Contact :</b></small>
+          <small>{{ user.contract }}</small>
+        </div>
+        <div class="col-8 col-md-9 p-1 d-none d-lg-block pl-3">
+          <h5 class="mb-0">{{ user.fullname }}</h5>
           <small>User ID : {{ user.email }}</small>
           <br />
           <small><b>Contact :</b></small>

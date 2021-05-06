@@ -6,11 +6,29 @@
       <hr class="mb-4" />
 
       <div class="row" id="headingrow">
-        <div class="col-4 col-md-2 p-1">
+        <div class="col-4 col-md-3 p-1">
           <img :src="checkImage" class="w-100 rounded-pill" />
         </div>
-        <div class="col-8 col-md-10 p-1">
+        <div class="col-8 col-md-9 p-1 d-lg-none">
           <p class="mb-0">{{ user.fullname }}</p>
+          <small>User ID : {{ user.email }}</small>
+          <div class="d-flex flex-row align-items-center">
+            <b-form-checkbox
+              v-model="checked"
+              name="check-button"
+              switch
+              @change="updateStatus"
+            ></b-form-checkbox>
+
+            <span v-if="checked == true" class="text-success">Active</span>
+            <span v-else class="text-danger">Inactive</span>
+          </div>
+          <small><b>Contact :</b></small>
+          <br>
+          <small>{{ user.contract }}</small>
+        </div>
+        <div class="col-8 col-md-9 p-1 d-none d-lg-block pl-3">
+          <h5 class="mb-0">{{ user.fullname }}</h5>
           <small>User ID : {{ user.email }}</small>
           <div class="d-flex flex-row align-items-center">
             <b-form-checkbox
