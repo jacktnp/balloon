@@ -41,7 +41,7 @@
           >
             <div class="row" id="headingrow">
               <div class="col-4">
-                <img :src="data.img[0].url || ''" class="w-100 rounded" v-if="!data.img" />
+                <img :src="data.img[0].url || ''" class="w-100 rounded" />
               </div>
               <div class="col-8 p-0">
                 <p class="mb-0">
@@ -74,7 +74,7 @@
               <p class="mb-0">
                 <i class="far fa-clock"></i> {{ convertDate(data.date_return) }}
               </p>
-              <small><b>Count : </b> {{ data.device.length }} ชิ้น</small>
+              <small><i class="far fa-box-open"></i> x{{ data.device.length }}</small>
             </div>
             <div class="col-4">
               <b-button

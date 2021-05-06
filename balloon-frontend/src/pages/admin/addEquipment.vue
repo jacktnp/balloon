@@ -65,9 +65,8 @@
       class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
       style="background: #F1F1F1;bottom: 0px;height: 10vh;"
     >
-      <b-button class="w-75" variant="success" @click="addEquipment"
-        >SAVE</b-button
-      >
+      <b-button class="btn-width-fixed mb-2" variant="success" @click="addEquipment"
+        >Save</b-button>
     </div>
 
     <b-modal id="modal-status" no-close-on-backdrop centered hide-header hide-footer>

@@ -22,7 +22,7 @@
           v-for="(item, index) in filteredList"
           :key="index"
         >
-          <div class="card my-3" @click="openModal(item._id)">
+          <div class="card my-3 pointer" @click="openModal(item._id)">
             <img :src="checkImage(item.img)" height="150px" />
           </div>
           <h6 class="text-center">{{ item.name_type }}</h6>

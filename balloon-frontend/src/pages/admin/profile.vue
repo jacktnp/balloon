@@ -34,10 +34,10 @@
       class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
       style="background: #F1F1F1;bottom: 0px;height: 20vh;"
     >
-      <b-button class="w-75 mb-2" variant="secondary" @click="editModal"
+      <b-button class="btn-width-fixed mb-2" variant="secondary" @click="editModal"
         >Edit</b-button
       >
-      <b-button class="w-75" variant="danger" :to="{ name : 'logout' }"
+      <b-button class="btn-width-fixed" variant="danger" :to="{ name : 'logout' }"
         >Logout</b-button
       >
     </div>
@@ -54,7 +54,7 @@
 
         <hr />
         
-        <b-form-group label="Upload image">
+        <b-form-group label="Upload Profile">
           <div id="file-upload-form" class="uploader">
             <input
               id="file-upload"

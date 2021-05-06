@@ -11,14 +11,14 @@
       >
         <div class="row" id="headingrow">
           <div
-            class="col py-1 rounded-pill status"
+            class="col py-1 rounded-pill status pointer"
             :class="{ active: status == 'In Process' }"
             @click.prevent="status = 'In Process'"
           >
             <small>In Process</small>
           </div>
           <div
-            class="col py-1 rounded-pill status"
+            class="col py-1 rounded-pill status pointer"
             :class="{ active: status == 'Late' }"
             @click.prevent="status = 'Late'"
           >
@@ -45,8 +45,8 @@
               <small>{{ data.email }}</small>
               <br />
               <small
-                ><b>Count : </b> {{ data.device.length }} ชิ้น 
-                <i class="far fa-clock"></i> {{ convertDate(data.date_return) }}
+                ><i class="far fa-box-open"></i> x{{ data.device.length }}  
+                <i class="far fa-clock ml-3"></i> {{ convertDate(data.date_return) }}
               </small>
             </div>
           </div>
@@ -72,8 +72,8 @@
               <small>{{ data.email }}</small>
               <br />
               <small
-                ><b>Count : </b> {{ data.device.length }} ชิ้น 
-                <i class="far fa-clock"></i> {{ convertDate(data.date_return) }}
+                ><i class="far fa-box-open"></i> x{{ data.device.length }}  
+                <i class="far fa-clock ml-3"></i> {{ convertDate(data.date_return) }}
               </small>
             </div>
           </div>

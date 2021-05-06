@@ -10,7 +10,7 @@
       </h5>
       <hr class="mb-4" />
 
-      <img :src="checkImage(equipment.img)" class="w-100" />
+      <img :src="checkImage(equipment.img)" class="w-100 rounded" />
       <p class="mt-3 mb-1">{{ equipment.name_type }}</p>
       <small class="mb-0"
         ><b>Description : </b> {{ equipment.detail_type }}</small
@@ -57,6 +57,7 @@
 
           <div class="float-right">
             <small
+              class="pointer"
               @click.prevent="
                 downloadItem(item.name_type, item._id, item.code_device)
               "
@@ -64,7 +65,7 @@
               <i class="fas fa-download"></i>
             </small>
 
-            <small class="pl-2" @click.prevent="openStatusModal2(item._id)">
+            <small class="pl-2 pointer" @click.prevent="openStatusModal2(item._id)">
               <i class="fas fa-trash-alt"></i>
             </small>
           </div>
@@ -78,10 +79,10 @@
       class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
       style="background: #F1F1F1;bottom: 0px;height: 15vh;"
     >
-      <b-button class="w-75 mb-2" variant="success" @click="downloadAll"
+      <b-button class="btn-width-fixed mb-2" variant="success" @click="downloadAll"
         >Download <i class="far fa-qrcode"></i
       ></b-button>
-      <b-button class="w-75" variant="secondary" v-b-modal.edit-type-modal
+      <b-button class="btn-width-fixed" variant="secondary" v-b-modal.edit-type-modal
         >Edit</b-button
       >
     </div>
@@ -93,7 +94,7 @@
       centered
       hide-footer
     >
-      <form @submit="editType">
+      <form @submit.prevent="editType">
         <b-form-group label="Equipment Title :">
           <b-form-input
             v-model="editEquipment.name_type"
@@ -265,6 +266,7 @@ export default {
       });
     },
     getEquipment() {
+      this.$isLoading(true);
       axios
         .get("type/id/" + this.$route.params.id, {
           headers: {
@@ -292,6 +294,7 @@ export default {
         })
         .then(
           res => {
+            this.$isLoading(false);
             this.device = res.data.device;
           },
           err => {
@@ -339,6 +342,7 @@ export default {
         })
         .then(
           res => {
+            this.$bvModal.hide("modal-status2");
             this.equipment = {};
             this.device = [];
             this.getEquipment();

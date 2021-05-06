@@ -6,11 +6,11 @@
             <hr class="mb-5">
 
             <div class="text-center">
-                <img v-if="borrow_status <= 0" class="w-75" style="border: .5em solid #fff" :src="'https://dev.initerapp.com/qrcode-uid.php?id='+$store.getters.info.user.email">
+                <img v-if="borrow_status <= 0" class="w-75" style="border: .5em solid #fff" :src="'https://dev.initerapp.com/qrcode-uid.php?id='+$store.getters.info.user.email || ''">
                 <img v-else class="w-75" style="border: .5em solid #fff" src="../../assets/alert/ban.png">
             </div>
             <br>
-            <h5 class="mt-3 text-center"><b>User ID :</b> {{ $store.getters.info.user.email }}</h5>
+            <h5 class="mt-3 text-center"><b>User ID :</b> {{ $store.getters.info.user.email || '' }}</h5>
         </b-container>
     </div>
 </template>
@@ -28,8 +28,9 @@ export default {
     };
   },
   methods: {
-    getUser() {
-      axios
+    async getUser() {
+      this.$isLoading(true);
+      await axios
         .get("user/" + this.$store.getters.info.user._id, {
           headers: {
             Authorization: "Bearer " + this.$store.getters.info.token
@@ -37,9 +38,11 @@ export default {
         })
         .then(
           res => {
+            this.$isLoading(false);
             this.borrow_status = res.data.user.have_borrow;
           },
           err => {
+            this.$isLoading(false);
             this.$router.push({ name: 'logout'});
             console.log(err);
           }

@@ -6,7 +6,7 @@
       <hr class="mb-4" />
 
       <div
-        class="card mb-3 border-0"
+        class="card mb-3 border-0 pointer"
         style="background: transparent"
         v-for="(data, index) in history"
         :key="index"
@@ -21,9 +21,9 @@
             <small>{{ data.email }}</small>
             <br />
             <small
-              ><b>Count : </b> {{ data.device.length }} ชิ้น
-              <i class="far fa-clock"></i> {{ convertDate(data.date_return) }}
-            </small>
+                ><i class="far fa-box-open"></i> x{{ data.device.length }}  
+                <i class="far fa-clock ml-3"></i> {{ convertDate(data.date_return) }}
+              </small>
           </div>
         </div>
         <hr />

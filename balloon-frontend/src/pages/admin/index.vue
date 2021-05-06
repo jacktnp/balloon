@@ -41,7 +41,7 @@
         </b-list-group-item>
       </b-list-group>
 
-      <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
+      <!-- <div class="position-fixed next-step w-100" style="bottom: 2em;">
         <b-button
           class="w-100"
           variant="primary"
@@ -49,10 +49,21 @@
           :disabled="items.length <= 0"
           >Next</b-button
         >
-      </div>
+      </div> -->
+      
     </b-container>
 
-    <b-container class="w-75 p-0" v-else-if="step == 2">
+    <div
+      class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
+      style="background: #F1F1F1;bottom: 0px;height: 10vh;"
+      v-if="step == 1"
+    >
+      <b-button class="btn-width-fixed mb-2" variant="primary" @click="nextStep(1)" :disabled="items.length <= 0"
+        >Next</b-button
+      >
+    </div>
+
+    <b-container class="w-75 p-0" v-if="step == 2">
       <h4 class="mt-4 font-weight-light">Enter User ID</h4>
       <hr class="mb-4" />
 
@@ -106,7 +117,7 @@
         </div>
       </div>
 
-      <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
+      <!-- <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
         <b-button
           class="w-100"
           variant="primary"
@@ -114,10 +125,20 @@
           :disabled="!userShow"
           >Next</b-button
         >
-      </div>
+      </div> -->
     </b-container>
 
-    <b-container class="w-75 p-0" v-else-if="step == 3">
+    <div
+      class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
+      style="background: #F1F1F1;bottom: 0px;height: 10vh;"
+      v-if="step == 2"
+    >
+      <b-button class="btn-width-fixed mb-2" variant="primary" @click="nextStep(2)" :disabled="!userShow"
+        >Next</b-button
+      >
+    </div>
+
+    <b-container class="w-75 p-0" v-if="step == 3">
       <h4 class="mt-4 font-weight-light">Confirm</h4>
       <hr class="mb-4" />
 
@@ -146,12 +167,22 @@
         v-model="deadline"
       ></b-form-datepicker>
 
-      <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
+      <!-- <div class="position-fixed" style="width: 60%; left: 20%; bottom: 2em;">
         <b-button class="w-100" variant="success" @click.prevent="borrow"
           >Confirm</b-button
         >
-      </div>
+      </div> -->
     </b-container>
+
+    <div
+      class="position-fixed d-flex flex-column justify-content-center align-items-center w-100"
+      style="background: #F1F1F1;bottom: 0px;height: 10vh;"
+      v-if="step == 3"
+    >
+      <b-button class="btn-width-fixed mb-2" variant="success" @click.prevent="borrow"
+        >Confirm</b-button
+      >
+    </div>
 
     <!-- Modal -->
     <b-modal id="modal-qrcode" centered hide-footer title="QR SCANNER">
@@ -222,7 +253,18 @@ export default {
       this.$bvModal.hide("modal-qrcode");
     },
     async addItem() {
-      if (this.item.length > 0) {
+      var checkDuplicate = false;
+      await this.items.map(value => {
+        if(value.code_device == this.item){
+          checkDuplicate = true;
+        }
+      });
+
+      if (checkDuplicate == true) {
+        alert("มีข้อมูลนี้แล้วในระบบ ไม่สามารถเพิ่มตัวที่ซ้ำกันได้");
+      }
+      else if (this.item.length > 0) {
+        this.$isLoading(true);
         // get Item detail
         await axios
           .get("device/code/" + this.item, {
@@ -232,9 +274,11 @@ export default {
           })
           .then(
             res => {
+              this.$isLoading(false);
               if (res.data.device.length == 0) {
                 alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง");
-              } else {
+              } 
+              else {
                 if (res.data.device[0].status_device == "Active") {
                   var arr = {};
                   arr["_id"] = res.data.device[0]._id;
@@ -248,39 +292,53 @@ export default {
               }
             },
             err => {
+              this.$isLoading(false);
               console.log(err);
               alert("ไม่มีรหัสนี้อยู่ในระบบ โปรดตรวจสอบอีกครั้ง");
             }
           );
         this.item = "";
       } else {
+        this.$isLoading(false);
         alert("กรุณาระบุข้อมูลให้ครบ");
       }
     },
     async addItembyQR(decode) {
-      await axios
-        .get("device/id/" + decode, {
-          headers: {
-            Authorization: "Bearer " + this.$store.getters.info.token
-          }
-        })
-        .then(
-          res => {
-            if (res.data.device[0].status_device == "Active") {
-              var arr = {};
-              arr["_id"] = res.data.device[0]._id;
-              arr["code_device"] = res.data.device[0].code_device;
-              arr["name_type"] = res.data.device[0].name_type;
-              arr["img"] = res.data.device[0].img;
-              this.items.push(arr);
-            } else if (res.data.device[0].status_device == "borrow") {
-              alert("This item didn't return to admin.");
+      var checkDuplicate = false;
+      await this.items.map(value => {
+        if(value._id == decode){
+          checkDuplicate = true;
+        }
+      });
+      
+      if (checkDuplicate == true) {
+        alert("มีข้อมูลนี้แล้วในระบบ ไม่สามารถเพิ่มตัวที่ซ้ำกันได้");
+      }
+      else {
+        await axios
+          .get("device/id/" + decode, {
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.info.token
             }
-          },
-          err => {
-            alert("Undefined");
-          }
-        );
+          })
+          .then(
+            res => {
+              if (res.data.device[0].status_device == "Active") {
+                var arr = {};
+                arr["_id"] = res.data.device[0]._id;
+                arr["code_device"] = res.data.device[0].code_device;
+                arr["name_type"] = res.data.device[0].name_type;
+                arr["img"] = res.data.device[0].img;
+                this.items.push(arr);
+              } else if (res.data.device[0].status_device == "borrow") {
+                alert("This item didn't return to admin.");
+              }
+            },
+            err => {
+              alert("Undefined");
+            }
+          );
+        }
       this.item = "";
       this.closeQRModal();
     },
@@ -386,3 +444,17 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.next-step {
+  width: 480px;
+  left: 37%;
+}
+
+@media screen and (max-width: 480px) {
+  .next-step {
+    width: 60%;
+    left: 20%;
+  }
+}
+</style>

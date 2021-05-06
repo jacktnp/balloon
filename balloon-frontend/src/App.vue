@@ -27,6 +27,20 @@ html {
   max-width: 480px !important;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
+.btn-width-fixed {
+  width: 480px;
+}
+
+@media screen and (max-width: 480px) {
+  .btn-width-fixed {
+    width: 75%
+  }
+}
+
 /* Customize  */
 .bg-success, .btn-success, .badge-success {
   background: #4E9C81 !important;
@@ -136,5 +150,6 @@ html {
   margin: 0em;
   color: #5f6982;
 }
+
 
 </style>

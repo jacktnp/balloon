@@ -57,13 +57,14 @@ import axios from "@/store/api";
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      username: "sirion",
+      password: "password",
       error: ""
     };
   },
   methods: {
     authLogin() {
+      this.$isLoading(true);
       if (this.password == "password") {
         axios
           .post("login", {
@@ -72,6 +73,7 @@ export default {
           })
           .then(
             response => {
+              this.$isLoading(false);
               // Store & Redirect
               if(response.data.data.user == null) {
                 this.error = 'ยังไม่มียูสเซอร์นี้ในระบบน้าาา :D';
@@ -87,11 +89,13 @@ export default {
               }
             },
             error => {
+              this.$isLoading(false);
               this.error = 'ยังไม่มียูสเซอร์นี้ในระบบน้าาา :D';
               this.openStatusModal();
             }
           );
       } else {
+        this.$isLoading(false);
         this.error = 'ฮั่นแน่ มาแอบส่องเหรอ อิอิ :)';
         this.openStatusModal();
       }
