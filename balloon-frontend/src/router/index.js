@@ -3,6 +3,7 @@ import Router from 'vue-router'
 // Global
 import index from '@/pages/index'
 import auth from '@/pages/auth'
+import ldap from '@/pages/ldap'
 import logout from '@/pages/logout'
 // User
 import userindex from '@/pages/user/index'
@@ -33,8 +34,12 @@ export default new Router({
     {
       path: '/auth',
       name: 'auth',
-      component: auth,
-      meta: { title: "Test" }
+      component: auth
+    },
+    {
+      path: '/ldap',
+      name: 'ldap',
+      component: ldap
     },
     {
       path: '/logout',
