@@ -115,6 +115,9 @@ const getBorrowById = async (req, res, next) => {
 };
 module.exports.getBorrowById = getBorrowById;
 
+
+
+
 // --------------------------------------------------------------------------
 
 
@@ -220,11 +223,31 @@ module.exports.historyUserBorrow = async (req, res, next) => {
             }
         }
     ])
-    
+
     res.send({ "borrow": getBorrow })
 };
 
+module.exports.historyUserBorrowStatusBorrow = async (req, res, next) => {
+    const getBorrow = await Borrow.aggregate([
+        {
+            $match: {
+                status: "borrow",
+                email: req.params.id
+            }
+        },
+        {
+            $lookup:
+            {
+                from: 'users',
+                localField: 'email',
+                foreignField: 'email',
+                as: 'user'
+            }
+        }
+    ])
 
+    res.send({ "borrow": getBorrow })
+};
 
 module.exports.historyAllBorrow = async (req, res, next) => {
     const getBorrow = await Borrow.aggregate([
@@ -283,9 +306,10 @@ function sendmail(username) {
         text: 'เลยกำหนดคืนของ Suppport',                         // ข้อความ
         // html: "<br> Link:<a href= http://localhost:8080/test/validateRegister/" + validateRegisterToken + "> LISS <a>"  // ข้อความ
         html: `<b> กรุณาคืนของที่ยืม support  </b>`
+    }).then(data => {
+        console.log(data)
     }).catch(e => {
         console.log('mail :' + username + "  error")
-
     });
 
 
@@ -307,11 +331,15 @@ module.exports.alertReturn = async (req, res, next) => {
         status: 'borrow',
     })
     let sendEmail = []
+    console.log(getBorrow)
+
     getBorrow.map(data => {
         if (data.date_return.getTime() <= new Date().getTime()) {
             // sendEmail.email = data.email
             // sendEmail.date_return = data.date_return
-            const objData = { email: data.email, date_return: data.date_return }
+            const myMail = data.email.slice(2) + '@it.kmitl.ac.th'
+
+            const objData = { email: myMail, date_return: data.date_return }
             sendEmail.push(objData)
         }
     })
@@ -327,21 +355,20 @@ module.exports.alertReturnByEmail = async (req, res, next) => {
     console.log(new Date().toISOString())
     const getBorrow = await Borrow.find({
         status: 'borrow',
-        email:res.params.id
+        email: res.params.id
     })
     let sendEmail = []
+
     getBorrow.map(data => {
         if (data.date_return.getTime() <= new Date().getTime()) {
-            // sendEmail.email = data.email
-            // sendEmail.date_return = data.date_return
-            const objData = { email: data.email, date_return: data.date_return }
+            const objData = { email: data.contract, date_return: data.date_return }
             sendEmail.push(objData)
         }
     })
     console.log(sendEmail)
     sendEmail.map(data => {
-
-        sendmail(data.email)
+        console.log(data)
+        sendmail(data.contract)
     })
     res.send({ sendEmail: sendEmail })
 }

@@ -23,22 +23,22 @@ router.route('/device/return-all-device')
     .post(catchAsync(borrowController.updateAllDeviceInBorrow))
 router.route('/device/history-user-borrow/:id')
     .get(catchAsync(borrowController.historyUserBorrow))
-    router.route('/support/history-all-borrow')
+router.route('/support/history-all-borrow')
     .get(catchAsync(borrowController.historyAllBorrow))
 
 router.route('/device/alert-return')
     .get(borrowController.alertReturn)
 
-    router.route('/device/alert-return-by-email/:id')
+router.route('/device/alert-return-by-email/:id')
     .post(borrowController.alertReturnByEmail)
 
-
-
+router.route('/device/history-user-status-borrow/:id')
+    .get(catchAsync(borrowController.historyUserBorrowStatusBorrow))
 
 var cron = require('node-cron');
 const axios = require('axios');
 cron.schedule(' 0 9 * * *', () => {
-    axios.get('http://localhost:8080/borrow/device/alert-return').then(resp => {
+    axios.get('https://websitedesignit1.herokuapp.com/borrow/device/alert-return').then(resp => {
         console.log("---------user alert------------");
         console.log(resp.data);
     });
